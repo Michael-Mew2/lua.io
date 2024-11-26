@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailtester</title>
+</head>
+<body>
+    <h1>Email Verification</h1>
+    <!-- Im p-Tag zeigen wir an, ob der User verifiziert wurde -->
+    <p id="verification-status">Verification Status: Not Verified!</p>
+
+    <script>
+        async function verifyEmail() {
+            /* 
+            Mit URLSearchParams holen wir den Token, den wir im backend als Query am Ende der URL verschickt haben. Mit urlParams.get("token") können wir den Teil rausfiltern
+            */
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get("token");
+
+            if (token){
+                /* 
+                Bekommen wir einen Token, machen wir einen Fetch-request an den Server und schicken den Token (angehängt an die URL) mit
+                */
+                try {
+                    const response = await fetch(`http://localhost:5000/users/verify/${token}`)
+
+                    if (response.ok){
+                        const data = await response.json();
+                        console.log({data});
+                        /* 
+                        Kommenta again
+                        War die Validierung im Server erfolgreich, prüfen wir hier das Feld "emailValidated" aus der Antwort (bei Erfolg sollte das auf true gesetzt sein). Danach ändern wir den Text in unserem p-Tag um den neuen Verifizierungsstatus anzuzeigen
+                        */
+                       if (data.emailValidated) {
+                        document.querySelector("#verification-status").textContent = "Verification Status: Verified!"
+                       }
+                    } else {
+                        console.log("Error verifying email:", response.statusText);
+                        
+                    }
+                } catch (error) {
+                    console.log("Error verifying email:", error);
+                    
+                }
+            }
+        }
+        verifyEmail();
+    </script>
+</body>
+</html>
