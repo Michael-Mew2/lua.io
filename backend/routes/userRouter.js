@@ -6,7 +6,7 @@ const userRouter = Router();
 userRouter
     .post("/reg", user.createUser)
     .post("/log", user.loginUser)
-    .get("/verify", user.verifyEmail)
+    .get("/verify/:token", user.verifyEmail)
 
 
 export default userRouter;

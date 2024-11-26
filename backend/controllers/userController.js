@@ -26,7 +26,7 @@ export async function loginUser(req, res) {
 
         if(!user) return res.status(404).json({msg: "User not found!"});
 
-        if(!user.emailValidated) return res.status(403).json({msg: "You need to verify your Email before you can log in!"})
+        // if(!user.emailValidated) return res.status(403).json({msg: "You need to verify your Email before you can log in!"})
 
         const passwordMatch = user.authenticate(password);
 
@@ -42,7 +42,7 @@ export async function loginUser(req, res) {
 
 export async function verifyEmail(req, res) {
     try {
-        const {token} = req.query;
+        const {token} = req.params;
 
         if(!token) return res.status(400).json({msg:"No Token!"})
 
@@ -50,6 +50,7 @@ export async function verifyEmail(req, res) {
 
         if(user) {
             user.emailValidated = true;
+            user.validationToken = null
             await user.save();
             return res.status(200).json({msg: "Email was successfully verified!", emailValidated:user.emailValidated})
         } else {
