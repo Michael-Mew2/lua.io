@@ -1,78 +1,86 @@
-import { Box, Button } from '@mui/material'
-import * as React from 'react'
+import { Box, Button, Typography } from "@mui/material";
+import * as React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Home() {
-    const videoRef = React.useRef();
+  const navigate = useNavigate();
+  return (
+    <>
 
-    React.useEffect(() => {
-        console.log('Video Ref:', videoRef);
 
-        // Funktion zum Laden und Abspielen des Videos
-        const loadAndPlayVideo = () => {
-            if (videoRef.current && videoRef.current.readyState > 0) {
-                videoRef.current.play().catch(error => {
-                    console.error('Error playing video:', error);
-                });
-            } else {
-                console.log('Video not ready yet');
-                setTimeout(loadAndPlayVideo, 1000); // Wiederholen Sie dies alle Sekunde
-            }
-        };
+      {/* Der Rest des Inhalts */}
+      <Box
+        sx={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          alignContent:"flex-end",
+          zIndex: 1,
+          color: "white",
+          paddingLeft: "10vw",
+        //   paddingBottom: "10vh",
+        //   border: "2px solid green",
+          boxSizing: "border-box",
+        }}
+      >
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflow: "hidden",
+            marginTop: "50vh",
+          }}
+        >
+          <Typography
+            variant="h1"
+            sx={{
+              fontFamily: "monospace",
+              marginBottom: "2rem",
+              fontWeight:"600",
+            }}
+          >
+            Discover new tracks with lua.io
+          </Typography>
 
-        loadAndPlayVideo();
-    }, []);
-
-    return (
-        <>
-            {/* Video als Hintergrund */}
-            <Box 
-                sx={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100vh',
-                    zIndex: -1,  // Video hinter dem Rest der Inhalte
-                    overflow: 'hidden',  // Verhindert, dass Video aus dem Container herausragt
-                }}
+          <Box
+            sx={{
+              display: "flex",
+              gap: "2rem",
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                bgcolor: "white",
+                color: "purple",
+                fontSize: "1.3rem",
+                fontWeight: 600,
+                fontFamily: "monospace",
+                letterSpacing: "0.2rem",
+              }}
             >
-                <video 
-                    ref={videoRef} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline
-                    style={{
-                        objectFit: 'cover', // Video skaliert, um den gesamten Bildschirm zu füllen
-                        width: '100%',
-                        height: '100%',
-                    }}
-                >
-                    <source src="/backgrounds/AdobeStock_410948388.mp4" type="video/mp4" />
-                    {/* Alternativ kann hier noch eine WebM-Datei als Fallback angegeben werden */}
-                    <source src="/Backgrounds/video.webm" type="video/webm" />
-                    Dein Browser unterstützt das Video-Tag nicht.
-                </video>
-            </Box>
+              Join Us for free
+            </Button>
 
-            {/* Der Rest des Inhalts */}
-            <Box
-                sx={{
-                    position: 'relative',
-                    zIndex: 1,  // Der Inhalt bleibt über dem Video
-                    textAlign: 'left',
-                    color: 'white',
-                    paddingLeft: "10vw",
-                    paddingTop: '60vh',  // Hier kannst du den Abstand zum oberen Rand anpassen
-                }}
+            <Button
+              variant="outlined"
+              color="white"
+              sx={{
+                fontSize: "1.3rem",
+                fontWeight: 600,
+                fontFamily: "monospace",
+                letterSpacing: "0.2rem",
+                border: "2px solid",
+              }}
+              onClick={()=> navigate("/sign-in")}
             >
-                <div display="flex" style={{alignItems: 'flex-end'}}>
-
-                <h1 style={{fontFamily: 'monospace'}}>Discover new tracks with <br/> <span style={{fontWeight: "800"}}>lua.io</span></h1>
-                <Button variant='contained' color='deepPurple'>Sign In</Button>
-                <Button variant='outlined' color='white' style={{marginLeft: "2rem"}}>Log In</Button>
-                </div>
-            </Box>
-        </>
-    );
+              Log In
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </>
+  );
 }
