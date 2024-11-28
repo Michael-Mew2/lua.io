@@ -79,7 +79,6 @@ export default function Home() {
               sx={{
                 fontWeight: 600,
                 fontFamily: "monospace",
-                letterSpacing: "0.2rem",
                 border: "2px solid",
                 fontSize: {md:"1.3rem", xs: 20},
                 letterSpacing: {md: "0.2rem",xs: 2}

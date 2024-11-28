@@ -51,8 +51,11 @@ working on email verification, but it's not currently working, so its disabled f
 - finished a simple footer
 - created a leading page with an animated background and a log in and sign up button, of which only the log in works
 - created a log- in site (which doesn't work)
+- can reg user
   
 ### todo
+- fixing log in, sign up and authentification!
+
 - link up the header
 - link up the leading page
 - link up the log in page with the backend
