@@ -39,7 +39,7 @@ export default function Header() {
 
   React.useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 20) {
         setIsScrolled(true); // Zustand auf true setzen
       } else {
         setIsScrolled(false); // Zustand auf false setzen
@@ -78,6 +78,7 @@ export default function Header() {
         transition: "background-color 0.3s ease",
         boxShadow: "none",
         padding: "10px",
+        zIndex: "3"
       }}
     >
       <Container maxWidth="xl">

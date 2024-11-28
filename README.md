@@ -6,9 +6,42 @@ lua.io is a plattform where you can share and discover unique tracks.
 ## How does lua.io work
 Just log in, take the link of your favorite song from either spotify or deezer and share it with the world, in return you'll get an unique song yourself! That's it
 
+## backend-routes
+- **POST**: localhost:5000/user/reg
+```JSON
+ JSON-Body:
+ {
+     "username": "",
+     "email": "",
+     "password": "",
+}
+```
+
+- **POST**: localhost:5000/user/reg
+```JSON
+JSON-Body:
+{
+    "email": "",
+    "password": "",
+}
+```
+
+*must be logged in first* for the /song-routes to work!
+
+- **POST**: localhost:5000/song/input
+```JSON
+JSON-Body:
+{
+    "link": "deezer or spotify-link"
+}
+```
+
+- **GET**: localhost:5000/song/output
+
 ## change log
 ## backend
 working on email verification, but it's not currently working, so its disabled for the time being.
+- needs a mechanism to avoid users getting the songs they suggested them self
 
 ## frontend
 - Started creating a website using React + MUI after testing out a few options (tailwind, bulma, bootstrap, moon.io)

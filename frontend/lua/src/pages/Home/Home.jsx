@@ -60,6 +60,7 @@ export default function Home() {
                 fontFamily: "monospace",
                 letterSpacing: "0.2rem",
               }}
+              onClick={() => navigate("/sign-up")}
             >
               Join Us for free
             </Button>
