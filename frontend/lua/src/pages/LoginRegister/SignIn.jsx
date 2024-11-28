@@ -43,6 +43,8 @@ export default function signInPage() {
         alignItems: "center",
         height: "100vh", // Vollbild-Höhe
         // bgcolor: '#f4f4f4', // Hintergrundfarbe der Seite
+        pt:{xs: 6, md:0},
+        pb: {xs:6, md: 0}
       }}
     >
       <Card

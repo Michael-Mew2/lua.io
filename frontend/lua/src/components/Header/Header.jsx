@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -37,6 +38,8 @@ export default function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -55,6 +58,12 @@ export default function Header() {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("members/dash");
+    }
+  }, [isLoggedIn, navigate]);
+
   //    const handleOpenNavMenu = (event) => {
   //     setAnchorElNav(event.currentTarget);
   //   };
@@ -66,9 +75,31 @@ export default function Header() {
   //     setAnchorElNav(null);
   //   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = React.useCallback(() => {
     setAnchorElUser(null);
-  };
+  }, []);
+  
+  const handleMenuItemClick = React.useCallback(
+    (setting) => {
+      handleCloseUserMenu();
+      switch (setting.label) {
+        /* Status logged out: */
+        case "Log In":
+          navigate("/sign-in");
+          break;
+  
+        case "Register":
+          navigate("/sign-up");
+          break;
+  
+        /* More for status logged in: */
+        default:
+          console.log("Undefined target", setting.label);
+          break;
+      }
+    },
+    [navigate]
+  );
 
   return (
     <AppBar
@@ -77,8 +108,8 @@ export default function Header() {
         backgroundColor: isScrolled ? "#6a3093" : "transparent",
         transition: "background-color 0.3s ease",
         boxShadow: "none",
-        padding: "10px",
-        zIndex: "3"
+        padding: 20,
+        zIndex: "3",
       }}
     >
       <Container maxWidth="xl">
@@ -88,7 +119,7 @@ export default function Header() {
             variant="h6"
             noWrap
             component="a"
-            href={isLoggedIn ? "members/dashboard": "/"}
+            href={isLoggedIn ? "members/dash" : "/"}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -167,15 +198,17 @@ export default function Header() {
               </Button>
             ))}
           </Box>
-          {/* User Dropdown */}
+
+          {/* User Dropdown Icon */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Get Startet">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {!isLoggedIn ? (
+                  /* If NOT Logged In: */
                   <>
                     <Typography
-                    // variant="h5"
-                    noWrap
+                      // variant="h5"
+                      noWrap
                       sx={{
                         mr: 1,
                         display: { xs: "flex", md: "flex" },
@@ -193,6 +226,7 @@ export default function Header() {
                     <LoginIcon sx={{ color: "white" }} />
                   </>
                 ) : (
+                  /* If Logged In: */
                   <Avatar
                     alt="Getting Started"
                     sx={{ width: 54, height: 54, bgcolor: "white" }}
@@ -200,6 +234,8 @@ export default function Header() {
                 )}
               </IconButton>
             </Tooltip>
+
+            {/* Menu: */}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -219,7 +255,10 @@ export default function Header() {
             >
               {(isLoggedIn ? settingsInside : settingsOutside).map(
                 (setting) => (
-                  <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={setting.label}
+                    onClick={() => handleMenuItemClick(setting)}
+                  >
                     <ListItemIcon>{setting.icon}</ListItemIcon>
                     <Typography sx={{ textAlign: "center" }}>
                       {setting.label}

@@ -71,9 +71,11 @@ export default function SignUp() {
         alignItems: "center",
         height: "100vh",
         // bgcolor: "rgba(0,0,0,0)",
+        pt:{xs: 17, md:0},
+        pb: {xs:20, md: 0}
       }}
     >
-      <Card sx={{ width: 400, padding: 3, boxShadow: 3 }}>
+      <Card sx={{width: 400, padding: 3, boxShadow: 3 }}>
         {/* Überschrift */}
         <Typography
           variant="h5"

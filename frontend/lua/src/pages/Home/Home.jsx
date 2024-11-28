@@ -16,29 +16,37 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          alignItems: "flex-end",
+          alignItems: "flex-start",
           alignContent:"flex-end",
           zIndex: 1,
           color: "white",
-          paddingLeft: "10vw",
-        //   paddingBottom: "10vh",
+          paddingLeft: {md:20, xs:4},
+          paddingBottom: "10vh",
         //   border: "2px solid green",
           boxSizing: "border-box",
         }}
-      >
+        >
         <Box
           sx={{
             flexGrow: 1,
             overflow: "hidden",
             marginTop: "50vh",
+            pt:{s: 10, sm:0},
+            pb: {s:15, sm: 0}
           }}
         >
           <Typography
             variant="h1"
             sx={{
               fontFamily: "monospace",
-              marginBottom: "2rem",
+            
+              marginBottom: {md:2, xs:1},
               fontWeight:"600",
+              // fontSize:{xs:30,}
+             fontSize:{xs: 
+               40, md:90}
+            
+
             }}
           >
             Discover new tracks with lua.io
@@ -55,10 +63,10 @@ export default function Home() {
               sx={{
                 bgcolor: "white",
                 color: "purple",
-                fontSize: "1.3rem",
                 fontWeight: 600,
                 fontFamily: "monospace",
-                letterSpacing: "0.2rem",
+                fontSize: {md:"1.3rem", xs: 20},
+                letterSpacing: {md: "0.2rem",xs: 2}
               }}
               onClick={() => navigate("/sign-up")}
             >
@@ -69,11 +77,12 @@ export default function Home() {
               variant="outlined"
               color="white"
               sx={{
-                fontSize: "1.3rem",
                 fontWeight: 600,
                 fontFamily: "monospace",
                 letterSpacing: "0.2rem",
                 border: "2px solid",
+                fontSize: {md:"1.3rem", xs: 20},
+                letterSpacing: {md: "0.2rem",xs: 2}
               }}
               onClick={()=> navigate("/sign-in")}
             >
