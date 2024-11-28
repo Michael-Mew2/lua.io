@@ -5,15 +5,27 @@ import { sendVerificationMail } from "../services/nodemailer.js";
 
 export async function createUser(req, res) {
     try {
+        console.log("request Body:", req.body);
         const {username, email} = req.body
+        console.log({username, email});
+        
         const existingUser = await User.findOne({username, email});
         
-        if(existingUser) return res.status(409).json({msg: "User already exists"})
-
+        
+        if(existingUser) {
+            console.log("User already exists");
+            
+            return res.status(409).json({msg: "User already exists"})
+        }
+        
         const newUser = await User.create(req.body);
+        console.log(newUser);
+        const token = generateToken(newUser.id)
 
-        await sendVerificationMail(newUser);
-        res.status(201).json({msg: "User was created", newUser})
+        console.log(token);
+        
+        // await sendVerificationMail(newUser);
+        res.cookie("jwt", token, {httpOnly:false, secure: false, maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
     } catch (error) {
         res.status(500).json({msg: "Creating User was unsuccessful!"})
     }

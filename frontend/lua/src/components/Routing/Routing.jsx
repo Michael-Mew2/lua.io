@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Layout from "../Layout/Layout";
 import Home from "../../pages/Home/Home";
 import SignIn from "../../pages/LoginRegister/SignIn";
@@ -9,6 +9,11 @@ import MusicShare from "../../pages/MusicShare/MusicShare";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 export default function Routing() {
+  const navigate = useNavigate();
+
+  const redirectToDashboard = () => {
+    navigate("/members/dash")
+  }
   return (
     <>
       <Routes>

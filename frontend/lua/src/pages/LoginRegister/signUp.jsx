@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import {AuthContext, AuthProvider} from "../../contextx/AuthContext"
 import {
   Box,
   Card,
@@ -40,6 +41,8 @@ export default function SignUp() {
   const [favoritePlanet, setFavoritePlanet] = React.useState("");
   const [favoriteColor, setFavoriteColor] = React.useState("#000000");
 
+  const {signUpHandler} = React.useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -49,18 +52,17 @@ export default function SignUp() {
 
   const handleColorChange = (event) => setFavoriteColor(event.target.value);
 
-  const handleSignUp = (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    alert(
-      `Sign up with: 
-      Username: ${data.get("username")},
-      Email: ${data.get("email")},
-      Password: ${data.get("password")},
-      Favorite Planet: ${data.get("favoritePlanet")},
-      Favorite Color: ${data.get("favoriteColor")},
-      Birthdate: ${data.get("birthdate")}`
-    );
+    const username = data.get("username");
+    const email = data.get("email");
+    const password = data.get("password");
+    const profilePic = data.get("favoritePlanet");
+    const color = data.get("favoriteColor");
+    const birthdate = data.get("birthdate");
+
+    await signUpHandler(username, email, password, profilePic, color, birthdate);
   };
 
   return (

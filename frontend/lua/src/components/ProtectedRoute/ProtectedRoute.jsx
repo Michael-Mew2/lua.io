@@ -1,9 +1,15 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
+import {AuthProvider} from "../../contextx/AuthContext"
 
 export default function ProtectedRoute() {
-    const isAuthenticated = localStorage.getItem("isAuthenticated") === "true"
+  const { isLoggedIn } = AuthProvider();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/sign-in" replace />;
+  }
+
   return (
-    !isAuthenticated ? <Navigate to="/sign-in" replace /> : <Outlet />
+     <Outlet />
   )
 }
