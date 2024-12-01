@@ -7,6 +7,7 @@ import SignUp from "../../pages/LoginRegister/signUp";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import MusicShare from "../../pages/MusicShare/MusicShare";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import SongDetails from "../../pages/SongDetails/SongDetails";
 
 export default function Routing() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function Routing() {
           <Route path="members" element={<ProtectedRoute />}>
             <Route path="dash" element={<Dashboard />} />
             <Route path="music" element={<MusicShare />} />
+            <Route path="claim" element={<SongDetails />} />
           </Route>
         </Route>
       </Routes>

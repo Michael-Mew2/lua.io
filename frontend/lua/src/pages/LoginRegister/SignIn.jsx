@@ -1,4 +1,8 @@
 import * as React from "react";
+// import {loginApi} from "../../api/api"
+import {AuthContext} from "../../contextx/AuthContext"
+
+// ----------
 import {
   Box,
   Card,
@@ -14,7 +18,6 @@ import {
   Link,
   Alert,
 } from "@mui/material";
-import {AuthContext} from "../../contextx/AuthContext"
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Visibility from "@mui/icons-material/Visibility";
@@ -26,7 +29,7 @@ import { useNavigate } from "react-router-dom";
 export default function signInPage() {
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const {signInHandler} = React.useContext(AuthContext);
+  const {isLoggedIn, setIsLoggedIn, loginApi} = React.useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -38,9 +41,19 @@ export default function signInPage() {
     const data = new FormData(event.currentTarget)
     const email = data.get("email")
     const password = data.get("password");
-
-    await signInHandler(email, password);
+    // console.log({email}, {password});
+    const user = await loginApi(email, password)
+    if (user) {
+      setIsLoggedIn(true)
+      navigate("/members/dash")
+      return;
+    }
+    
   }
+  React.useEffect(()=> {
+    console.log("Is logged IN:", isLoggedIn);
+    
+  }, [isLoggedIn])
   return (
     <Box
       sx={{

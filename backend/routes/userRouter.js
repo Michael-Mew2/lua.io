@@ -7,6 +7,7 @@ userRouter
     .post("/reg", user.createUser)
     .post("/log", user.loginUser)
     .get("/verify/:token", user.verifyEmail)
+    .get("/check-auth", user.checkAuthStatus)
 
 
 export default userRouter;

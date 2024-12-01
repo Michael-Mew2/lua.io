@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import {AuthContext, AuthProvider} from "../../contextx/AuthContext"
+import {AuthContext} from "../../contextx/AuthContext"
+import { registerApi } from "../../api/api";
 import {
   Box,
   Card,
@@ -41,7 +42,18 @@ export default function SignUp() {
   const [favoritePlanet, setFavoritePlanet] = React.useState("");
   const [favoriteColor, setFavoriteColor] = React.useState("#000000");
 
-  const {signUpHandler} = React.useContext(AuthContext);
+  const handleSignUp  = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const username = data.get("username");
+    const email = data.get("email");
+    const password = data.get("password");
+    const profilePic = data.get("favoritePlanet");
+    const color = data.get("favoriteColor");
+    const birthdate = data.get("birthdate");
+    
+    await registerApi(username, email, password, profilePic, color, birthdate) 
+  }
 
   const navigate = useNavigate();
 
@@ -51,19 +63,6 @@ export default function SignUp() {
     setFavoritePlanet(event.target.value);
 
   const handleColorChange = (event) => setFavoriteColor(event.target.value);
-
-  const handleSignUp = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const username = data.get("username");
-    const email = data.get("email");
-    const password = data.get("password");
-    const profilePic = data.get("favoritePlanet");
-    const color = data.get("favoriteColor");
-    const birthdate = data.get("birthdate");
-
-    await signUpHandler(username, email, password, profilePic, color, birthdate);
-  };
 
   return (
     <Box

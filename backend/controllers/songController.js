@@ -130,8 +130,14 @@ export const getRandomSong = async (req, res) => {
       await User.findByIdAndUpdate(userId, {$push: {listenedSongs: {songId:randomSong._id}}})
     }
 
+    const userWhoAdded = await User.findById(randomSong.addedBy);
 
-    res.status(200).json(randomSong)
+    const responseSong = {
+      ...randomSong,
+      addedBy : userWhoAdded ? userWhoAdded.username : null
+    }
+
+    res.status(200).json(responseSong)
   } catch (error) {
     res.status(500).json({msg: "Ein Fehler beim Finden eines Songs ist aufgetreten!"})
   }

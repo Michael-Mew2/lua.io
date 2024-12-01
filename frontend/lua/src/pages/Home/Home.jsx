@@ -6,8 +6,6 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <>
-
-
       {/* Der Rest des Inhalts */}
       <Box
         sx={{
@@ -17,36 +15,33 @@ export default function Home() {
           flexDirection: "column",
           justifyContent: "flex-end",
           alignItems: "flex-start",
-          alignContent:"flex-end",
+          alignContent: "flex-end",
           zIndex: 1,
           color: "white",
-          paddingLeft: {md:20, xs:4},
+          paddingLeft: { md: 20, xs: 4 },
           paddingBottom: "10vh",
-        //   border: "2px solid green",
+          //   border: "2px solid green",
           boxSizing: "border-box",
         }}
-        >
+      >
         <Box
           sx={{
             flexGrow: 1,
             overflow: "hidden",
             marginTop: "50vh",
-            pt:{s: 10, sm:0},
-            pb: {s:15, sm: 0}
+            pt: { s: 10, sm: 0 },
+            pb: { s: 15, sm: 0 },
           }}
         >
           <Typography
             variant="h1"
             sx={{
               fontFamily: "monospace",
-            
-              marginBottom: {md:2, xs:1},
-              fontWeight:"600",
-              // fontSize:{xs:30,}
-             fontSize:{xs: 
-               40, md:90}
-            
 
+              marginBottom: { md: 2, xs: 1 },
+              fontWeight: "600",
+              // fontSize:{xs:30,}
+              fontSize: { xs: 40, md: 90 },
             }}
           >
             Discover new tracks with lua.io
@@ -65,8 +60,8 @@ export default function Home() {
                 color: "purple",
                 fontWeight: 600,
                 fontFamily: "monospace",
-                fontSize: {md:"1.3rem", xs: 20},
-                letterSpacing: {md: "0.2rem",xs: 2}
+                fontSize: { md: "1.3rem", xs: 20 },
+                letterSpacing: { md: "0.2rem", xs: 2 },
               }}
               onClick={() => navigate("/sign-up")}
             >
@@ -74,16 +69,15 @@ export default function Home() {
             </Button>
 
             <Button
-              variant="outlined"
+              variant="contained"
               color="white"
               sx={{
-                fontWeight: 600,
+                fontSize: { md: "1.3rem", xs: 20 },
+                letterSpacing: { md: "0.2rem", xs: 2 },
                 fontFamily: "monospace",
-                border: "2px solid",
-                fontSize: {md:"1.3rem", xs: 20},
-                letterSpacing: {md: "0.2rem",xs: 2}
+                fontWeight: 600,
               }}
-              onClick={()=> navigate("/sign-in")}
+              onClick={() => navigate("/sign-in")}
             >
               Log In
             </Button>

@@ -1,88 +1,58 @@
 import * as React from "react";
-import {api} from "../api/api"
-import { signUp, signIn, signOut } from "../api/api";
+
+const BASE_URL =  /* process.env.REACT_APP_API_BASE_URL  ||  */"http://localhost:3000"
 
 export const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = React.useState();
-  const [user, setUser] = React.useState();
+export const AuthProvider = ({children}) => {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    checkAuthStatus();
-  }, []);
 
-  const checkAuthStatus = async () => {
-    try {
-      const response = await api.get("/user/log");
-      if (response.data.success) {
-        setIsLoggedIn(true);
-        setUser(response.data.user);
-      } else {
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error.message);
-      setIsLoggedIn(false);
-      setUser(null);
+// Authentifizierungs-Endpunkte:
+
+// Log in:
+const loginApi = async (email, password) => {
+  try {
+    
+    const response = await fetch(BASE_URL+"/user/log", {
+      method:"POST",
+      body: JSON.stringify({email, password}),
+      headers: {
+        "Content-Type":"application/json"
+      },
+      credentials: "include"
+    });
+
+    const userData = await response.json();
+    // console.log("UserData:",userData);
+    
+    if (response.status === 200){
+      setUser(userData.user)
+      console.log("Anmeldung erfolgreich!");
+      return userData
     }
-  };
 
-  const signUpHandler = async (
-    username,
-    email,
-    password,
-    profilePic,
-    color,
-    birthdate
-  ) => {
-    try {
-      const response = await signUp(
-        username,
-        email,
-        password,
-        profilePic,
-        color,
-        birthdate
-      );
-      if (response.success) {
-        // Hier sollten Sie die Anmeldung durchführen
-        await signIn(email, password);
-        redirectToDashboard();
-      }
-    } catch (error) {
-      console.error("Error Create user:", error.message);
-    }
-  };
-
-  const signInHandler = async (email, password) => {
-    try {
-      const response = await signIn(email, password);
-      if (response.success) {
-        redirectToDashboard();
-      }
-    } catch (error) {
-      console.error("Error logging in::", error.message);
-    }
-  };
-
-  const signOutHandler = async () => {
-    try {
-      await signOut();
-      setIsLoggedIn(false);
-      setUser(null);
-      navigate("/sign-in");
-    } catch (error) {
-      console.log("Error logging out", error.message);
-    }
-  };
-
-  return (
+    throw new Error("Anmeldung fehlgeschlagen!")
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+  
+  return ( 
     <AuthContext.Provider
-      value={{ isLoggedIn, user, signUpHandler, signInHandler, signOutHandler }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+    value={{
+      isLoggedIn,
+      setIsLoggedIn,
+      user,
+      setUser,
+      loginApi,
+      loading, // Kann verwendet werden, um einen Ladezustand anzuzeigen
+    }}
+  >
+    {children}
+  </AuthContext.Provider>
+  )
+}

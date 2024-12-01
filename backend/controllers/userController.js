@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import { generateToken } from "../middleware/jwt.js";
 import nodemailer from "nodemailer";
 import { sendVerificationMail } from "../services/nodemailer.js";
+import { verifyToken } from "../middleware/jwt.js";
 
 export async function createUser(req, res) {
     try {
@@ -9,7 +10,9 @@ export async function createUser(req, res) {
         const {username, email} = req.body
         console.log({username, email});
         
-        const existingUser = await User.findOne({username, email});
+
+        const existingUser = await User.findOne({email});
+        const usernameUsed = await User.findOne({username});
         
         
         if(existingUser) {
@@ -17,16 +20,24 @@ export async function createUser(req, res) {
             
             return res.status(409).json({msg: "User already exists"})
         }
+
+        if(usernameUsed) {
+            console.log("Username already taken");
+            
+            return res.status(226).json({msg: "Username already taken"})
+        }
         
         const newUser = await User.create(req.body);
-        console.log(newUser);
-        const token = generateToken(newUser.id)
+        console.log("newuser:", newUser);
+        const token = generateToken({userId: newUser.id})
 
         console.log(token);
         
         // await sendVerificationMail(newUser);
-        res.cookie("jwt", token, {httpOnly:false, secure: false, maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
+        res.cookie("jwt", token, {httpOnly:true, secure: process.env.NODE_ENV ==="production", maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
     } catch (error) {
+        console.log("error in createUser:", error);
+        
         res.status(500).json({msg: "Creating User was unsuccessful!"})
     }
 }
@@ -46,7 +57,7 @@ export async function loginUser(req, res) {
 
         const token = generateToken({userId: user._id});
 
-        return res.status(200).cookie("jwt", token, {httpOnly:false, secure: false, maxAge: 60*60*1000}).json({msg: "Login successful"});
+        return res.status(200).cookie("jwt", token, {httpOnly:true, secure: process.env.NODE_ENV ==="production", maxAge: 60*60*1000}).json({msg: "Login successful", user: {id: user._id, username: user.username, email: user.email, profilePic: user.profilePic, color:user.color, tokens: user.tokens}});
     } catch (error) {
         res.status(500).json({msg: "Server error"})
     }
@@ -73,3 +84,25 @@ export async function verifyEmail(req, res) {
         res.status(500).json({msg: "Server Error at Email Verification!"})
     }
 } 
+
+export async function checkAuthStatus(req, res) {
+    try {
+        console.log("Check if cookies:", req.cookies, req.headers.authorization?.split(' '));
+        
+        const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];
+        console.log("Check Token:", token);
+        
+        if(!token) return res.status(401).json({msg:"No token provided!"})
+
+        const decoded = verifyToken(token);
+        if(!decoded) return res.status(401).json({msg: "Invalid token!"});
+
+        const user = await User.findById(decoded.userid);
+        if(!user) return res.status(404).json({msg: "User not found!"})
+
+        return res.status(200).json({msg: "Authenticated", user})
+    } catch (error) {
+        console.error("Auth check error:", error);
+        res.status(500).json({ msg: "Error checking authentication!" });
+    }
+}

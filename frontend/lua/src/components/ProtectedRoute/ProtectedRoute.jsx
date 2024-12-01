@@ -1,9 +1,9 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import {AuthProvider} from "../../contextx/AuthContext"
+import {AuthContext} from "../../contextx/AuthContext"
 
 export default function ProtectedRoute() {
-  const { isLoggedIn } = AuthProvider();
+  const { isLoggedIn } = React.useContext(AuthContext)
 
   if (!isLoggedIn) {
     return <Navigate to="/sign-in" replace />;
