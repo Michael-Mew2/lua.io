@@ -40,6 +40,36 @@ const loginApi = async (email, password) => {
     
   }
 }
+
+  /* // Check Auth Status:
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch(BASE_URL + "/user/me", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData.user);
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Fehler beim Überprüfen der Authentifizierung:", error);
+      setIsLoggedIn(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Authentifizierungsstatus bei der Initialisierung prüfen
+  React.useEffect(() => {
+    checkAuthStatus();
+  }, []); */
   
   return ( 
     <AuthContext.Provider

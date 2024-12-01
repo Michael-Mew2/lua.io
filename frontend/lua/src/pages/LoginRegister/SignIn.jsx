@@ -51,7 +51,7 @@ export default function signInPage() {
     
   }
   React.useEffect(()=> {
-    console.log("Is logged IN:", isLoggedIn);
+    // console.log("Is logged IN:", isLoggedIn);
     
   }, [isLoggedIn])
   return (
