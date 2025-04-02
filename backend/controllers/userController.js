@@ -34,7 +34,7 @@ export async function createUser(req, res) {
         console.log(token);
         
         // await sendVerificationMail(newUser);
-        res.cookie("jwt", token, {httpOnly:true, secure: process.env.NODE_ENV ==="production", maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
+        res.cookie("jwt", token, {httpOnly:true, secure: true, sameSite: "lax", maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
     } catch (error) {
         console.log("error in createUser:", error);
         
@@ -49,7 +49,7 @@ export async function loginUser(req, res) {
 
         if(!user) return res.status(404).json({msg: "User not found!"});
 
-        // if(!user.emailValidated) return res.status(403).json({msg: "You need to verify your Email before you can log in!"})
+        // if(!user.emailValidated) return res.status(403).json({msg: "You need to verify younoner Email before you can log in!"})
 
         const passwordMatch = user.authenticate(password);
 
@@ -57,8 +57,10 @@ export async function loginUser(req, res) {
 
         const token = generateToken({userId: user._id});
 
-        return res.status(200).cookie("jwt", token, {httpOnly:true, secure: process.env.NODE_ENV ==="production", maxAge: 60*60*1000}).json({msg: "Login successful", user: {id: user._id, username: user.username, email: user.email, profilePic: user.profilePic, color:user.color, tokens: user.tokens}});
+        return res.status(200).cookie("jwt", token, {httpOnly:true, secure: true, sameSite: "lax", maxAge: 60*60*1000}).json({msg: "Login successful", user: {id: user._id, username: user.username, email: user.email, profilePic: user.profilePic, color:user.color, tokens: user.tokens}});
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({msg: "Server error"})
     }
 }
@@ -87,7 +89,7 @@ export async function verifyEmail(req, res) {
 
 export async function checkAuthStatus(req, res) {
     try {
-        console.log("Check if cookies:", req.cookies, req.headers.authorization?.split(' '));
+        console.log("Check if cookies (userController.js):", req.cookies, "headers.auth:", req.headers.authorization?.split(' '));
         
         const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];
         console.log("Check Token:", token);
@@ -97,7 +99,7 @@ export async function checkAuthStatus(req, res) {
         const decoded = verifyToken(token);
         if(!decoded) return res.status(401).json({msg: "Invalid token!"});
 
-        const user = await User.findById(decoded.userid);
+        const user = await User.findById(decoded.userId);
         if(!user) return res.status(404).json({msg: "User not found!"})
 
         return res.status(200).json({msg: "Authenticated", user})

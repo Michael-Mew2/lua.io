@@ -26,7 +26,7 @@ const loginApi = async (email, password) => {
     });
 
     const userData = await response.json();
-    // console.log("UserData:",userData);
+    console.log("UserData:",userData);
     
     if (response.status === 200){
       setUser(userData.user)
@@ -41,13 +41,18 @@ const loginApi = async (email, password) => {
   }
 }
 
-  /* // Check Auth Status:
+  // Check Auth Status:
   const checkAuthStatus = async () => {
+    console.log("check Auth:", `${BASE_URL}/user/check`);
+    
     try {
-      const response = await fetch(BASE_URL + "/user/me", {
+      const response = await fetch(`${BASE_URL}/user/check`, {
         method: "GET",
         credentials: "include",
       });
+
+      console.log(response);
+      
 
       if (response.ok) {
         const userData = await response.json();
@@ -69,7 +74,7 @@ const loginApi = async (email, password) => {
   // Authentifizierungsstatus bei der Initialisierung prüfen
   React.useEffect(() => {
     checkAuthStatus();
-  }, []); */
+  }, []);
   
   return ( 
     <AuthContext.Provider
