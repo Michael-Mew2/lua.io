@@ -1,15 +1,15 @@
-import * as React from 'react'
-import Header from '../Header/Header'
-import { Outlet } from 'react-router-dom'
-import Footer from '../Footer/Footer'
-import { Box } from '@mui/material'
+import * as React from "react";
+import Header from "../Header/Header";
+import { Outlet } from "react-router-dom";
+import Footer from "../Footer/Footer";
+import { Box } from "@mui/material";
+import Background from "../Background/Background";
 
 export default function Layout() {
   const videoRef = React.useRef();
 
   React.useEffect(() => {
     // console.log("Video Ref:", videoRef);
-
     // // Funktion zum Laden und Abspielen des Videos
     // const loadAndPlayVideo = () => {
     //   if (videoRef.current && videoRef.current.readyState > 0) {
@@ -21,16 +21,16 @@ export default function Layout() {
     //     setTimeout(loadAndPlayVideo, 1000); // Wiederholen Sie dies alle Sekunde
     //   }
     // };
-
     // loadAndPlayVideo();
   }, []);
-  
+
   return (
     <>
-    <Header />
-    <main>
-      {/* Video als Hintergrund */}
-      <Box
+      <Background />
+      <Header />
+      <main>
+        {/* Video als Hintergrund */}
+        {/*  <Box
         sx={{
           position: "fixed",
           top: 0,
@@ -58,13 +58,13 @@ export default function Layout() {
             type="video/mp4"
           />
           {/* Alternativ kann hier noch eine WebM-Datei als Fallback angegeben werden */}
-          <source src="/Backgrounds/video.webm" type="video/webm" />
+        {/*  <source src="/Backgrounds/video.webm" type="video/webm" />
           Dein Browser unterstützt das Video-Tag nicht.
-        </video>
-      </Box>
-      <Outlet />
-    </main>
-    <Footer />
+        </video> 
+      </Box> */}
+        <Outlet />
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
