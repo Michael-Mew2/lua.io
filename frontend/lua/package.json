@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
     "@mantine/carousel": "^8.3.13",
     "@mantine/charts": "^8.3.13",
     "@mantine/code-highlight": "^8.3.13",
@@ -25,8 +23,6 @@
     "@mantine/nprogress": "^8.3.13",
     "@mantine/spotlight": "^8.3.13",
     "@mantine/tiptap": "^8.3.13",
-    "@mui/icons-material": "^6.1.8",
-    "@mui/material": "^6.1.8",
     "@tiptap/extension-link": "^3.15.3",
     "@tiptap/pm": "^3.15.3",
     "@tiptap/react": "^3.15.3",

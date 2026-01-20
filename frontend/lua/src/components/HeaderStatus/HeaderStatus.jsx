@@ -5,14 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import LoggedInMenu from './LoggedInHeaderMenu';
 import LoggedOutMenu from './LoggedOutHeaderMenu';  // Import der neuen Komponenten
 // ----------
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-// ----------
-import LoginIcon from '@mui/icons-material/Login';
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 
 export default function HeaderStatus() {
   const { isLoggedIn, setIsLoggedIn, user, setUser} = React.useContext(AuthContext);
@@ -68,7 +60,7 @@ export default function HeaderStatus() {
   return (
     <>
       {/* User Dropdown Icon */}
-      <Box sx={{ flexGrow: 0 }}>
+      {/* <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Get Started">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
             {!isLoggedIn ? (
@@ -115,7 +107,7 @@ export default function HeaderStatus() {
         </Tooltip>
 
         {/* Menu: */}
-        <Menu
+        {/* <Menu
           sx={{ mt: "45px" }}
           id="menu-appbar"
           anchorEl={anchorElUser}
@@ -138,7 +130,8 @@ export default function HeaderStatus() {
             <LoggedOutMenu handleMenuItemClick={handleMenuItemClick} />
           )}
         </Menu>
-      </Box>
+      </Box> */}
+      hi
     </>
   );
 }
