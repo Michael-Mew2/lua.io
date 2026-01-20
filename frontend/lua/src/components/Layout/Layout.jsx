@@ -7,12 +7,19 @@ import Background from "../Background/Background";
 export default function Layout() {
   return (
     <>
-      <Header />
-      <main style={{ position: "relative", zIndex: 1, minHeight: "100vh" }}>
+      <main
+        style={{
+          position: "relative",
+          zIndex: 1,
+          minHeight: "100vh",
+          width: "100vw",
+        }}
+      >
+        <Header style={{ position: "relative", zIndex: 10 }} />
         <Background />
         <Outlet />
+        <Footer style={{ zIndex: 10 }} />
       </main>
-      <Footer />
     </>
   );
 }

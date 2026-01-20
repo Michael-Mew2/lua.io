@@ -19,6 +19,7 @@ body {
   /* display: flex; */
   place-items: center;
   box-sizing: border-box;
+  overflow: hidden;  /* Entfernen, falls es zu problemen dadurch kommt! */
 
 }
 

@@ -1,17 +1,34 @@
-import React from 'react'
+import * as React from "react";
+import { Anchor, Container, Group } from "@mantine/core";
+
+import classes from "./Footer.module.css";
 
 const links = [
-    "https://www.youtube.com/watch?v=zD7ZsVMCeyY",
-    "https://www.youtube.com/watch?v=0-B4ZbVUtcE"
-]
+  { link: "#", label: "Contact" },
+  { link: "#", label: "Privacy" },
+  { link: "#", label: "Blog" },
+  { link: "#", label: "Careers" },
+];
 
-export default function Footer() {
-    const [isHovered, setIsHovered] = React.useState(false)
-    const openRandomLink = () => {
-        const randomLink = links[Math.floor(Math.random() * links.length)]
-        window.open(randomLink, "_blank")
-    }
+export default function FooterSimple() {
+  const items = links.map((link) => (
+    <Anchor
+      color="dimmed"
+      key={link.label}
+      href={link.link}
+      onClick={(event) => event.preventDefault()}
+      size="sm"
+    >
+      {link.label}
+    </Anchor>
+  ));
+
   return (
-    <>hi</>
-  )
+    <div className={classes.footer}>
+      <Container className={classes.inner}>
+        <b>lua.io</b>
+        <Group className={classes.links}>{items}</Group>
+      </Container>
+    </div>
+  );
 }

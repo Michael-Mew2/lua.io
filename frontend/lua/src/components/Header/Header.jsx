@@ -53,7 +53,7 @@ export default function Header() {
 
   return (
     <> 
-    <Title>Hi</Title> 
+    <Title style={{fontSize: "100px"}}>Hi</Title> 
     </>
   );
 }

@@ -8,9 +8,9 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <div className={styles.home} >
-      <Title order={1} ff="monospace" bg="transparent">
-        Discover <br /> new tracks
-      </Title>
+      <h1>
+        <b>Discover</b><br/>new tracks.
+      </h1>
     </div>
   );
 }
