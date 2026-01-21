@@ -1,59 +1,45 @@
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
-//==========
+import { useState } from 'react';
+import { Burger, Container, Group } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+// import { MantineLogo } from '@mantinex/mantine-logo';
+import classes from './Header.module.css';
 
-import HeaderStatus from "../HeaderStatus/HeaderStatus";
-import { Title } from "@mantine/core";
+const links = [
+  { link: '/about', label: 'Features' },
+  { link: '/pricing', label: 'Pricing' },
+  { link: '/learn', label: 'Learn' },
+  { link: '/community', label: 'Community' },
+];
 
+export default function HeaderSimple() {
+  const [opened, { toggle }] = useDisclosure(false);
+  const [active, setActive] = useState(links[0].link);
 
-const pages = [];
-
-export default function Header() {
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  //    const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  
-
-
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true); // Zustand auf true setzen
-      } else {
-        setIsScrolled(false); // Zustand auf false setzen
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll); // Scroll-Ereignis hinzufügen
-
-    // console.log({ isScrolled, setIsScrolled });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll); // Event-Listener entfernen
-    };
-  }, []);
-
-  
-
-  //    const handleOpenNavMenu = (event) => {
-  //     setAnchorElNav(event.currentTarget);
-  //   };
-
-
-  //   const handleCloseNavMenu = () => {
-  //     setAnchorElNav(null);
-  //   };
-
-
-  
-  
+  const items = links.map((link) => (
+    <a
+      key={link.label}
+      href={link.link}
+      className={classes.link}
+      data-active={active === link.link || undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(link.link);
+      }}
+    >
+      {link.label}
+    </a>
+  ));
 
   return (
-    <> 
-    <Title style={{fontSize: "100px"}}>Hi</Title> 
-    </>
+    <header className={classes.header}>
+      <Container size="md" className={classes.inner}>
+       {/*  <MantineLogo size={28} /> */}
+        <Group gap={5} visibleFrom="xs">
+          {items}
+        </Group>
+
+        <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+      </Container>
+    </header>
   );
 }

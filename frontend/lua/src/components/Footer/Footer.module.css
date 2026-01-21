@@ -1,6 +1,24 @@
 .footer {
-  margin-top: 120px;
-  border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  margin: var(--mantine-spacing-lg);
+  z-index: 10;
+flex-shrink: 0;
+position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    border-radius: var(--mantine-radius-lg);
+    background-color: var(--mantine-color-body);
+    opacity: 0.7;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.9px);
+    -webkit-backdrop-filter: blur(7.9px);
+    border: 1px solid
+      color-mix(in srgb, var(--mantine-color-body), transparent 20%);
+  }
 }
 
 .inner {
