@@ -7,7 +7,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 export default function Home() {
   const navigate = useNavigate();
   return (
-    <div className={styles.home} pl="xl">
+    <div className={styles.home}>
       <h1>
         <b>Discover</b>
         <br />
@@ -18,6 +18,7 @@ export default function Home() {
           variant="gradient"
           gradient={{ from: "grape", to: "cyan", deg: 125 }}
           size="lg"
+          onClick={() => navigate("/sign-up")}
         >
           Sign up
         </Button>
