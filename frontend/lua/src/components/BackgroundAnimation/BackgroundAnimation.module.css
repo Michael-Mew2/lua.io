@@ -14,11 +14,11 @@
       var(--animation-timing-function, linear) infinite;
     background: repeating-linear-gradient(
       var(--deg, 0deg),
-      var(--color1, #feac5e),
-      var(--color2, #c779d0),
-      var(--color3, #4bc0c8),
-      var(--color2, #c779d0),
-      var(--color1, #feac5e)
+      var(--color1),
+      var(--color2),
+      var(--color3),
+      var(--color2),
+      var(--color1)
     );
     background-size: 100% 500%;
     display: block;

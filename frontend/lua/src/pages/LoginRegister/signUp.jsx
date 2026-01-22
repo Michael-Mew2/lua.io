@@ -502,7 +502,10 @@ export default function SignUp() {
         <Center className={styles.center} h="100%" p="md" radius="lg">
           <Card className={styles.card} shadow="sm" p="sm" radius="md">
             <Card.Section h={140}>
-              <BackgroundAnimation favoriteColor={previewData.favoriteColor} />
+              <BackgroundAnimation
+                key={previewData.favoriteColor}
+                favoriteColor={previewData.favoriteColor}
+              />
             </Card.Section>
             <Avatar
               bg={previewData.favoriteColor}
@@ -521,7 +524,8 @@ export default function SignUp() {
               {previewData.username}
             </Text>
             <Text ta="center" c="dimmed" fz="sm">
-              {previewData.birthdate && `Birthday: ${formatBirthdate(previewData.birthdate)}`}
+              {previewData.birthdate &&
+                `Birthday: ${formatBirthdate(previewData.birthdate)}`}
             </Text>
             <Group justify="center" mt="md" pl="xl" pr="xl">
               {previewData.badges.map((badge, index) => (
