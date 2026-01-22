@@ -21,7 +21,11 @@ import {
   Center,
   NativeSelect,
   Radio,
-  TagsInput
+  TagsInput,
+  Checkbox,
+  Anchor,
+  Blockquote,
+  SimpleGrid,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DatePickerInput } from "@mantine/dates";
@@ -32,6 +36,7 @@ import {
   IconCheck,
   IconLock,
   IconNorthStar,
+  IconQuote,
   IconTag,
   IconUser,
   IconX,
@@ -65,8 +70,8 @@ const exampleBadges = [
   "I have no idea",
   "Ugly",
   "Looking for cool music",
-  "Don't stress me"
-]
+  "Don't stress me",
+];
 
 function PasswordRequirement({ meets, label }) {
   return (
@@ -126,7 +131,6 @@ export default function SignUp() {
     },
 
     validate: {
-      // Einfache Regeln pro Feld
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
         val.length < 6 ? "Password must be at least 6 characters" : null,
@@ -182,8 +186,9 @@ export default function SignUp() {
 
   return (
     <>
-      <Grid h={"100%"} align="center">
-        <Grid.Col span={6} h={"100%"}>
+      
+        <SimpleGrid cols={{base: 1, md: 2}} h={"100%"} spacing="lg" >
+        
           <Paper className={styles.form} p="md" bdrs="lg" h={"100%"}>
             <Title order={2} className={styles.title}>
               Welcome to lua.io
@@ -272,8 +277,8 @@ export default function SignUp() {
               </Stepper.Step>
               {/* ----- End of Step 2 ----- */}
 
-{/* ----- Step 3 ----- */}
-<Stepper.Step label="Step 3" description="What do you like">
+              {/* ----- Step 3 ----- */}
+              <Stepper.Step label="Step 3" description="What do you like">
                 <NativeSelect
                   withAsterisk
                   leftSection={<IconNorthStar size={16} stroke={1.5} />}
@@ -310,16 +315,64 @@ export default function SignUp() {
                   </Group>
                 </Radio.Group>
 
-                <TagsInput label="Describe yourself" description="Describe yourself with up to 5 badges. Confirm with either 'Enter' or 'Tab'" placeholder="Enter a tag" maxTags={5} data={exampleBadges} clearable leftSection={<IconTag size={16} stroke={1.5} />} />
-
-</Stepper.Step>
-{/* ------ End of Step 3 ----- */}
+                <TagsInput
+                  label="Describe yourself"
+                  description="Describe yourself with up to 5 badges. Confirm with either 'Enter' or 'Tab'"
+                  placeholder="Enter a tag"
+                  maxTags={5}
+                  data={exampleBadges}
+                  clearable
+                  leftSection={<IconTag size={16} stroke={1.5} />}
+                />
+              </Stepper.Step>
+              {/* ------ End of Step 3 ----- */}
 
               {/* ----- Step 4 ----- */}
-              <Stepper.Step
-                label="Step 4"
-                description="The legal Stuff"
-              ></Stepper.Step>
+              <Stepper.Step label="Step 4" description="The legal Stuff">
+                  
+                <Checkbox.Group
+                mt="sm"
+                  label="Do you accept our Terms and Conditions?"
+                  withAsterisk
+                >
+                  <Checkbox
+                    mt="sm"
+                    label={
+                      <>
+                        I have read and accept the{" "}
+                        <Anchor target="_blank" inherit>
+                          Terms and Conditions
+                        </Anchor>
+                      </>
+                    }
+                    {...form.getInputProps("acceptedTerms", {
+                      type: "checkbox",
+                    })}
+                  />
+                </Checkbox.Group>
+        
+                <Checkbox.Group
+                mt="sm"
+                  label="Do you accept our Data agreement?"
+                  withAsterisk
+                >
+                  <Checkbox
+                    mt="sm"
+                    label={
+                      <>
+                        I have read and accept the{" "}
+                        <Anchor target="_blank" inherit>
+                          Data agreement
+                        </Anchor>
+                      </>
+                    }
+                   {...form.getInputProps("acceptedDataAgreement", { type: "checkbox" })}
+                  />
+                </Checkbox.Group>
+                <Blockquote color="violet" p="sm" mt="lg">
+                    Accepting this is like signing a contract, so please read these contracts carefully!
+                  </Blockquote>
+              </Stepper.Step>
               {/* ----- End of Step 4 ----- */}
             </Stepper>
 
@@ -330,16 +383,19 @@ export default function SignUp() {
                   Back
                 </Button>
               )}
-              {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
+              {active !== 4 && <Button onClick={nextStep}>Next step</Button>}
             </Group>
+            <Anchor href="/sign-in" mt="xl">
+              Already have an account? Sign in
+            </Anchor>
             {/* ----- End of Buttons ----- */}
           </Paper>
-        </Grid.Col>
+        
 
         {/* ---------- */}
 
         {/* right side */}
-        <Grid.Col span={6}>
+        
           <Center className={styles.center} h="100%" p="md" radius="lg">
             <Card className={styles.card} shadow="sm" padding="xs" radius="md">
               <Card.Section
@@ -353,8 +409,8 @@ export default function SignUp() {
               </Text>
             </Card>
           </Center>
-        </Grid.Col>
-      </Grid>
+       
+      </SimpleGrid>
     </>
   );
 }
