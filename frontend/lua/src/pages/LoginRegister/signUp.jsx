@@ -199,7 +199,7 @@ export default function SignUp() {
       case "Sun (It's not a planet)":
         return <IconSun size={40} color={iconColor} />;
 
-      case "Moon (It's not a planet)":
+      case "Moon (Also not a planet)":
         return <IconMoon size={40} color={iconColor} />;
 
       case "I love them all":
