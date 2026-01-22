@@ -1,12 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Paper,
-  CardContent,
-  Typography,
-  Button,
-  Alert,
-} from "@mui/material";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -59,7 +51,7 @@ export default function SongDetails() {
     
   }, []);
 
-  if (loading) {
+  /* if (loading) {
     return (
       <Box
         sx={{
@@ -87,10 +79,10 @@ export default function SongDetails() {
         <Typography>No song found. Please try again later.</Typography>
       </Box>
     );
-  }
+  } */
 
   return (
-    <Box
+   /*  <Box
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -165,6 +157,7 @@ export default function SongDetails() {
           </Box>
         </CardContent>
       </Paper>
-    </Box>
+    </Box> */
+    <>hi</>
   );
 }

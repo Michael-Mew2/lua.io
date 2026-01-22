@@ -1,0 +1,121 @@
+.background {
+  aspect-ratio: 4/1;
+  container-type: inline-size;
+  display: grid;
+  grid-auto-flow: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -10;
+
+  b {
+    background-color: orange;
+    animation: Y var(--animation-duration, 8s) var(--animation-delay, 0s)
+      var(--animation-timing-function, linear) infinite;
+    background: repeating-linear-gradient(
+      var(--deg, 0deg),
+      var(--color1),
+      var(--color2),
+      var(--color3),
+      var(--color2),
+      var(--color1)
+    );
+    background-size: 100% 500%;
+    display: block;
+
+    &:nth-of-type(1) {
+      --animation-delay: 50ms;
+    }
+    &:nth-of-type(2) {
+      --animation-delay: 100ms;
+    }
+    &:nth-of-type(3) {
+      --animation-delay: 150ms;
+    }
+    &:nth-of-type(4) {
+      --animation-delay: 200ms;
+    }
+    &:nth-of-type(5) {
+      --animation-delay: 250ms;
+    }
+    &:nth-of-type(6) {
+      --animation-delay: 300ms;
+    }
+    &:nth-of-type(7) {
+      --animation-delay: 350ms;
+    }
+    &:nth-of-type(8) {
+      --animation-delay: 400ms;
+    }
+    &:nth-of-type(9) {
+      --animation-delay: 450ms; /*  */
+    }
+    &:nth-of-type(10) {
+      --animation-delay: 500ms;
+    }
+    &:nth-of-type(11) {
+      --animation-delay: 550ms;
+    }
+    &:nth-of-type(12) {
+      --animation-delay: 600ms;
+    }
+    &:nth-of-type(13) {
+      --animation-delay: 650ms;
+    }
+    &:nth-of-type(14) {
+      --animation-delay: 700ms;
+    }
+    &:nth-of-type(15) {
+      --animation-delay: 750ms;
+    }
+    &:nth-of-type(16) {
+      --animation-delay: 800ms;
+    }
+    &:nth-of-type(17) {
+      --animation-delay: 850ms;
+    }
+    &:nth-of-type(18) {
+      --animation-delay: 900ms;
+    }
+    &:nth-of-type(19) {
+      --animation-delay: 950ms;
+    }
+    &:nth-of-type(20) {
+      --animation-delay: 1000ms;
+    }
+    &:nth-of-type(21) {
+      --animation-delay: 1050ms;
+    }
+    &:nth-of-type(22) {
+      --animation-delay: 1100ms;
+    }
+    &:nth-of-type(23) {
+      --animation-delay: 1150ms;
+    }
+    &:nth-of-type(24) {
+      --animation-delay: 1200ms;
+    }
+    &:nth-of-type(25) {
+      --animation-delay: 1250ms;
+    }
+
+    &.span-2 {
+      grid-column: span 2;
+    }
+    &.span-3 {
+      grid-column: span 3;
+    }
+    &.span-4 {
+      grid-column: span 4;
+    }
+    &.span-5 {
+      grid-column: span 5;
+    }
+  }
+}
+
+@keyframes Y {
+  to {
+    background-position-y: 250%;
+  }
+}

@@ -1,70 +1,58 @@
-import * as React from 'react'
-import Header from '../Header/Header'
-import { Outlet } from 'react-router-dom'
-import Footer from '../Footer/Footer'
-import { Box } from '@mui/material'
+import * as React from "react";
+import Header from "../Header/Header";
+import { Outlet } from "react-router-dom";
+import Footer from "../Footer/Footer";
+import Background from "../Background/Background";
+import { Box, ScrollArea } from "@mantine/core";
 
 export default function Layout() {
-  const videoRef = React.useRef();
-
-  React.useEffect(() => {
-    // console.log("Video Ref:", videoRef);
-
-    // // Funktion zum Laden und Abspielen des Videos
-    // const loadAndPlayVideo = () => {
-    //   if (videoRef.current && videoRef.current.readyState > 0) {
-    //     videoRef.current.play().catch((error) => {
-    //       console.error("Error playing video:", error);
-    //     });
-    //   } else {
-    //     console.log("Video not ready yet");
-    //     setTimeout(loadAndPlayVideo, 1000); // Wiederholen Sie dies alle Sekunde
-    //   }
-    // };
-
-    // loadAndPlayVideo();
-  }, []);
-  
   return (
     <>
-    <Header />
-    <main>
-      {/* Video als Hintergrund */}
       <Box
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
+        component="main"
+        style={{
+          position: "relative",
+          zIndex: 1,
           height: "100vh",
-          zIndex: -1, // Video hinter dem Rest der Inhalte
-          overflow: "hidden", // Verhindert, dass Video aus dem Container herausragt
+          width: "100vw",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
         }}
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
+        <Background />
+        <Header style={{ position: "relative", zIndex: 10 }} />
+        <ScrollArea
           style={{
-            objectFit: "cover", // Video skaliert, um den gesamten Bildschirm zu füllen
-            width: "100%",
-            height: "100%",
+            flex: 1, // Nimmt den restlichen Platz ein
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+            // Der Transparenz-Übergang oben und unten:
+            /*  WebkitMaskImage:
+              "linear-gradient(to bottom, transparent, black 2%, black 98%, transparent)",
+            maskImage:
+              "linear-gradient(to bottom, transparent, black 2%, black 98%, transparent)", */
+            /* border: "2px solid green", */
           }}
+          styles={{
+            viewport: { display: "flex", flexDirection: "column" },
+            content: {
+              minHeight: "100%",
+              display: "flex",
+              flexDirection: "column",
+            },
+          }}
+          /* viewportProps={{ style: { paddingBottom: "40px" } }} */ // Optional: Extra Platz unten im Scrollbereich
+          mr="lg"
+          ml="lg"
+          type="scroll"
+          offsetScrollbars
         >
-          <source
-            src="/backgrounds/AdobeStock_410948388.mp4"
-            type="video/mp4"
-          />
-          {/* Alternativ kann hier noch eine WebM-Datei als Fallback angegeben werden */}
-          <source src="/Backgrounds/video.webm" type="video/webm" />
-          Dein Browser unterstützt das Video-Tag nicht.
-        </video>
+          <Outlet />
+        </ScrollArea>
+        <Footer style={{ zIndex: 10 }} />
       </Box>
-      <Outlet />
-    </main>
-    <Footer />
     </>
-  )
+  );
 }

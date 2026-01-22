@@ -1,0 +1,15 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  padding-left: var(--mantine-spacing-xl);
+
+  h1 {
+    color: var(--mantine-color-white);
+    font-family: "Intel One Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+}
