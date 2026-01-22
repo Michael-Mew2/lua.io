@@ -26,19 +26,29 @@ import {
   Anchor,
   Blockquote,
   SimpleGrid,
+  Stack,
+  Badge,
+  Avatar,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DatePickerInput } from "@mantine/dates";
 import styles from "./SignUp.module.css";
 import {
+  IconAlien,
+  IconUniverse,
+  IconGalaxy,
+  IconMoon,
+  IconSun,
   IconAt,
   IconCalendar,
   IconCheck,
   IconLock,
   IconNorthStar,
+  IconPlanet,
   IconQuote,
   IconTag,
   IconUser,
+  IconWorld,
   IconX,
 } from "@tabler/icons-react";
 import Background from "../../components/Background/Background";
@@ -112,6 +122,13 @@ function getStrength(password) {
 export default function SignUp() {
   const [active, setActive] = React.useState(0);
   const [popoverOpened, setPopoverOpened] = React.useState(false);
+  const [previewData, setPreviewData] = React.useState({
+    username: "",
+    birthdate: "",
+    favoritePlanet: "",
+    favoriteColor: "#000000",
+    badges: [],
+  });
 
   const [favoritePlanet, setFavoritePlanet] = React.useState("");
   const [favoriteColor, setFavoriteColor] = React.useState("#000000");
@@ -126,6 +143,7 @@ export default function SignUp() {
       favoritePlanet: "",
       favoriteColor: "#000000",
       birthdate: "",
+      badges: [],
       acceptedTerms: false,
       acceptedDataAgreement: false,
     },
@@ -140,6 +158,62 @@ export default function SignUp() {
         active === 1 && val.trim().length < 3 ? "Username too short" : null,
     },
   });
+
+  // ----------
+
+  // Live aktualisierung der Preview
+
+  React.useEffect(() => {
+    setPreviewData({
+      username: form.values.username,
+      birthdate: form.values.birthdate,
+      favoritePlanet: form.values.favoritePlanet,
+      favoriteColor: form.values.favoriteColor,
+      badges: form.values.badges || [],
+    });
+  }, [form.values]);
+
+  const formatBirthdate = (date) => {
+    if (!date) return "";
+
+    const d = new Date(date);
+    return `${d.getMonth() + 1}.${d.getDate()}`;
+  };
+
+  const getContrastColor = (hexColor) => {
+    const r = parseInt(hexColor.substr(1, 2), 16);
+    const g = parseInt(hexColor.substr(3, 2), 16);
+    const b = parseInt(hexColor.substr(5, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness >= 128 ? "black" : "white";
+  };
+
+  const getPlanetIcon = (planet, iconColor) => {
+    switch (planet) {
+      case "Earth":
+        return <IconWorld size={40} color={iconColor} />;
+
+      case "Saturn":
+        return <IconPlanet size={40} color={iconColor} />;
+
+      case "Sun (It's not a planet)":
+        return <IconSun size={40} color={iconColor} />;
+
+      case "Moon (It's not a planet)":
+        return <IconMoon size={40} color={iconColor} />;
+
+      case "I love them all":
+        return <IconUniverse size={40} color={iconColor} />;
+
+      case "I hate them all":
+        return <IconGalaxy size={40} color={iconColor} />;
+
+      default:
+        return <IconAlien size={40} color={iconColor} />;
+    }
+  };
+
+  // ----------
 
   const nextStep = () => {
     if (active === 0) {
@@ -183,25 +257,35 @@ export default function SignUp() {
   // ---------
 
   const emailIcon = <IconAt size={16} />;
+  const generalGap = "xs";
 
   return (
     <>
-      
-        <SimpleGrid cols={{base: 1, md: 2}} h={"100%"} spacing="lg" >
-        
-          <Paper className={styles.form} p="md" bdrs="lg" h={"100%"}>
-            <Title order={2} className={styles.title}>
-              Welcome to lua.io
-            </Title>
-            {/* <form onSubmit={handleSignUp}> */}
-            <Stepper
-              size="xs"
-              radius="md"
-              active={active}
-              allowNextStepsSelect={false}
-            >
-              {/* ----- Step 1 ----- */}
-              <Stepper.Step label="Step 1" description="Log-in Credentials">
+      <SimpleGrid cols={{ base: 1, md: 2 }} h={"100%"} spacing="lg">
+        <Stack
+          className={styles.form}
+          p="md"
+          bdrs="lg"
+          h={"100%"}
+          w={"100%"}
+          justify="space-between"
+        >
+          <Title order={2} ml="sm">
+            Welcome to lua.io
+          </Title>
+          {/* <form onSubmit={handleSignUp}> */}
+          <Stepper
+            className={styles.formStepper}
+            p="sm"
+            bdrs="md"
+            size="xs"
+            radius="md"
+            active={active}
+            allowNextStepsSelect={false}
+          >
+            {/* ----- Step 1 ----- */}
+            <Stepper.Step>
+              <Stack gap={generalGap}>
                 <TextInput
                   label="Email"
                   description="Enter your Email"
@@ -251,11 +335,15 @@ export default function SignUp() {
                   {...form.getInputProps("confirmPassword")}
                   leftSection={<IconLock size={16} stroke={1.5} />}
                 />
-              </Stepper.Step>
-              {/* ----- End of Step 1 ----- */}
+              </Stack>
+            </Stepper.Step>
+            {/* ----- End of Step 1 ----- */}
 
-              {/* ----- Step 2 ----- */}
-              <Stepper.Step label="Step 2" description="Tell me about yourself">
+            {/* ----- Step 2 ----- */}
+            <Stepper.Step>
+              {" "}
+              {/* label="Step 2" description="Tell me about yourself" */}
+              <Stack gap={generalGap}>
                 <TextInput
                   label="Username"
                   leftSection={<IconUser size={16} stroke={1.5} />}
@@ -274,11 +362,14 @@ export default function SignUp() {
                   leftSection={<IconCalendar size={16} stroke={1.5} />}
                   {...form.getInputProps("birthdate")}
                 />
-              </Stepper.Step>
-              {/* ----- End of Step 2 ----- */}
+              </Stack>
+            </Stepper.Step>
+            {/* ----- End of Step 2 ----- */}
 
-              {/* ----- Step 3 ----- */}
-              <Stepper.Step label="Step 3" description="What do you like">
+            {/* ----- Step 3 ----- */}
+            <Stepper.Step>
+              <Stack gap={generalGap}>
+                {/* label="Step 3" description="What do you like" */}
                 <NativeSelect
                   withAsterisk
                   leftSection={<IconNorthStar size={16} stroke={1.5} />}
@@ -287,7 +378,6 @@ export default function SignUp() {
                   data={planets}
                   {...form.getInputProps("favoritePlanet")}
                 />
-
                 <Radio.Group
                   name="favoriteColor"
                   label="Favorite Color"
@@ -314,7 +404,6 @@ export default function SignUp() {
                     ))}
                   </Group>
                 </Radio.Group>
-
                 <TagsInput
                   label="Describe yourself"
                   description="Describe yourself with up to 5 badges. Confirm with either 'Enter' or 'Tab'"
@@ -323,15 +412,19 @@ export default function SignUp() {
                   data={exampleBadges}
                   clearable
                   leftSection={<IconTag size={16} stroke={1.5} />}
+                  {...form.getInputProps("badges")}
                 />
-              </Stepper.Step>
-              {/* ------ End of Step 3 ----- */}
+              </Stack>
+            </Stepper.Step>
+            {/* ------ End of Step 3 ----- */}
 
-              {/* ----- Step 4 ----- */}
-              <Stepper.Step label="Step 4" description="The legal Stuff">
-                  
+            {/* ----- Step 4 ----- */}
+            <Stepper.Step>
+              <Stack gap={generalGap}>
+                {" "}
+                {/* label="Step 4" description="The legal Stuff" */}
                 <Checkbox.Group
-                mt="sm"
+                  mt="sm"
                   label="Do you accept our Terms and Conditions?"
                   withAsterisk
                 >
@@ -350,9 +443,8 @@ export default function SignUp() {
                     })}
                   />
                 </Checkbox.Group>
-        
                 <Checkbox.Group
-                mt="sm"
+                  mt="sm"
                   label="Do you accept our Data agreement?"
                   withAsterisk
                 >
@@ -366,50 +458,84 @@ export default function SignUp() {
                         </Anchor>
                       </>
                     }
-                   {...form.getInputProps("acceptedDataAgreement", { type: "checkbox" })}
+                    {...form.getInputProps("acceptedDataAgreement", {
+                      type: "checkbox",
+                    })}
                   />
                 </Checkbox.Group>
                 <Blockquote color="violet" p="sm" mt="lg">
-                    Accepting this is like signing a contract, so please read these contracts carefully!
-                  </Blockquote>
-              </Stepper.Step>
-              {/* ----- End of Step 4 ----- */}
-            </Stepper>
+                  Accepting this is like signing a contract, so please read
+                  these contracts carefully!
+                </Blockquote>
+              </Stack>
+            </Stepper.Step>
+            {/* ----- End of Step 4 ----- */}
+          </Stepper>
 
-            {/* ----- Buttons ----- */}
-            <Group justify="flex-end" mt="xl">
+          {/* ----- Buttons ----- */}
+          <SimpleGrid
+            className={styles.buttonsStack}
+            cols={{ base: 1, md: 2 }}
+            p="sm"
+          >
+            <Group justify="flex-start">
               {active !== 0 && (
                 <Button variant="default" onClick={prevStep}>
                   Back
                 </Button>
               )}
-              {active !== 4 && <Button onClick={nextStep}>Next step</Button>}
+              {active !== 4 && (
+                <Button variant="filled" color="violet" onClick={nextStep}>
+                  Next step
+                </Button>
+              )}
             </Group>
-            <Anchor href="/sign-in" mt="xl">
-              Already have an account? Sign in
-            </Anchor>
-            {/* ----- End of Buttons ----- */}
-          </Paper>
-        
+            <Anchor href="/sign-in">Already have an account? Sign in</Anchor>
+          </SimpleGrid>
+          {/* ----- End of Buttons ----- */}
+        </Stack>
 
         {/* ---------- */}
 
         {/* right side */}
-        
-          <Center className={styles.center} h="100%" p="md" radius="lg">
-            <Card className={styles.card} shadow="sm" padding="xs" radius="md">
-              <Card.Section
-                h={"50%"}
-                styling={{ borderRadius: "var(--mantine-radius-md)" }}
-              >
-                <BackgroundAnimation />
-              </Card.Section>
-              <Text mt="md" mb="xs">
-                Username
-              </Text>
-            </Card>
-          </Center>
-       
+
+        <Center className={styles.center} h="100%" p="md" radius="lg">
+          <Card className={styles.card} shadow="sm" p="sm" radius="md">
+            <Card.Section h={140}>
+              <BackgroundAnimation favoriteColor={previewData.favoriteColor} />
+            </Card.Section>
+            <Avatar
+              bg={previewData.favoriteColor}
+              size={80}
+              radius={80}
+              mx="auto"
+              mt={-30}
+              className={styles.avatarPreview}
+            >
+              {getPlanetIcon(
+                previewData.favoritePlanet,
+                getContrastColor(previewData.favoriteColor),
+              )}
+            </Avatar>
+            <Text ta="center" fz="lg" fw={500} mt="sm">
+              {previewData.username}
+            </Text>
+            <Text ta="center" c="dimmed" fz="sm">
+              {previewData.birthdate && `Birthday: ${formatBirthdate(previewData.birthdate)}`}
+            </Text>
+            <Group justify="center" mt="md" pl="xl" pr="xl">
+              {previewData.badges.map((badge, index) => (
+                <Badge
+                  key={index}
+                  color={colors[index % colors.length].value}
+                  variant="filled"
+                >
+                  {badge}
+                </Badge>
+              ))}
+            </Group>
+          </Card>
+        </Center>
       </SimpleGrid>
     </>
   );
