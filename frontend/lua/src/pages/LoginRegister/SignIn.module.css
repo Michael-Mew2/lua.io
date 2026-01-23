@@ -1,0 +1,22 @@
+.baseBackground {
+  position: relative;
+  background: transparent;
+  z-index: 1;
+
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    border-radius: var(--mantine-radius-lg);
+    background-color: var(--mantine-color-body);
+    opacity: 0.1;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.9px);
+    -webkit-backdrop-filter: blur(7.9px);
+    border: 1px solid
+      color-mix(in srgb, var(--mantine-color-body), transparent 10%);
+  }
+}
