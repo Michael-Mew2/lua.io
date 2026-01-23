@@ -355,7 +355,7 @@ export default function SignUp() {
                 <DatePickerInput
                   clearable
                   withAsterisk
-                  dropdownType="modal"
+                  // dropdownType="modal"
                   label="Birthdate"
                   description="Why do you need to enter your Birthdate?"
                   placeholder="Enter your Birthday"
