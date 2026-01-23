@@ -499,7 +499,7 @@ export default function SignUp() {
 
         {/* right side */}
 
-        <Center className={styles.center} h="100%" p="md" radius="lg">
+        <Center className={styles.center} p="md" radius="lg">
           <Card className={styles.card} shadow="sm" p="sm" radius="md">
             <Card.Section h={140}>
               <BackgroundAnimation
