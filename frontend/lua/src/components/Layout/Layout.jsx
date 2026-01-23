@@ -47,6 +47,7 @@ export default function Layout() {
           mr="lg"
           ml="lg"
           type="scroll"
+          scrollbars="y"
           offsetScrollbars
         >
           <Outlet />

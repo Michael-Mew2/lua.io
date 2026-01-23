@@ -1,10 +1,12 @@
 import * as React from "react";
 // import {loginApi} from "../../api/api"
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contextx/AuthContext";
-import styles from "./SignIn.module.css";
+import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 
 // ----------
-import { useNavigate } from "react-router-dom";
+// Style imports
 import {
   Anchor,
   Card,
@@ -18,21 +20,46 @@ import {
   PasswordInput,
   Flex,
   Button,
+  Box,
 } from "@mantine/core";
-import { IconAt, IconLock } from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
+import { IconAt, IconCheck, IconLock, IconX } from "@tabler/icons-react";
+import styles from "./SignIn.module.css";
 
 // -----------
 
 export default function signInPage() {
+  const {loginApi} = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   const form = useForm({
     mode: "controlled",
     initialValues: {
       email: "",
       password: "",
+    },
+  });
+
+  // ----- Log-In Function -----
+  const handleLogin = async () => {
+    try {
+      await loginApi(form.values.email, form.values.password);
+      notifications.show({
+        title: `Welcome back ${response.data.username}`,
+        message: `u rock!`,
+        color: "green",
+        icon: <IconCheck size={20} />,
+      });
+      navigate("/"); // Weiterleitung
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Login failed. Please Check your credentials"
+      notifications.show({
+        title: "Error",
+        message: errorMessage,
+        color: "red",
+        icon:<IconX size={20} />,
+      })
     }
-  })
+  } 
 
   // ----- Styling options -----
   const generalGap = "xs";
@@ -41,7 +68,12 @@ export default function signInPage() {
       <SimpleGrid cols={{ base: 1, md: 2 }} h={"100%"} spacing="lg">
         {/* Quote-generato */}
         <Center className="" h="100%" p="md" radius="lg">
-          <Card className={styles.baseBackground} shadow="sm" p="sm" radius="lg">
+          <Box
+            className={styles.baseBackground}
+            shadow="sm"
+            p="sm"
+            radius="lg"
+          >
             <Blockquote
               color="violet"
               radius="md"
@@ -49,12 +81,12 @@ export default function signInPage() {
             >
               "I don’t remember growing older, when did they?"
             </Blockquote>
-          </Card>
+          </Box>
         </Center>
 
         {/* Sign-In-Form */}
         <Center className="" h="100%" radius="lg">
-          <Card
+          <Box
             className={styles.baseBackground}
             w="100%"
             shadow="sm"
@@ -64,7 +96,7 @@ export default function signInPage() {
             <Title order={2} ml="lg" mb="md" c="violet">
               Welcome back
             </Title>
-            <Card className={styles.baseBackground} p="md" radius="md">
+            <Box className={styles.baseBackground} p="md" radius="md">
               <Stack gap={generalGap}>
                 <TextInput
                   label="Email"
@@ -72,7 +104,6 @@ export default function signInPage() {
                   placeholder="john@the-moon.de"
                   withAsterisk
                   radius="sm"
-                  
                   leftSection={<IconAt size={16} />}
                 />
                 <PasswordInput
@@ -85,7 +116,7 @@ export default function signInPage() {
                   leftSection={<IconLock size={16} stroke={1.5} />}
                 />
               </Stack>
-            </Card>
+            </Box>
             <Flex direction="column" ml="lg" mr="lg">
               <Flex
                 direction="row-reverse"
@@ -93,14 +124,18 @@ export default function signInPage() {
                 justify="space-between"
                 mt="lg"
               >
-                <Button variant="filled" color="violet">Sign in</Button>
-                <Anchor fw={500} c="violet" href="#"  >Forgot your password?</Anchor>
+                <Button variant="filled" color="violet" onClick={handleLogin}>
+                  Sign in
+                </Button>
+                <Anchor fw={500} c="violet" href="#">
+                  Forgot your password?
+                </Anchor>
               </Flex>
               <Anchor fw={500} c="violet" href="/sign-up" mt="lg" ta="center">
                 Don't have an account? Sign up
               </Anchor>
             </Flex>
-          </Card>
+          </Box>
         </Center>
       </SimpleGrid>
     </>
