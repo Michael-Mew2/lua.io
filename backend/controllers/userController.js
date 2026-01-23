@@ -45,9 +45,11 @@ export async function createUser(req, res) {
 export async function loginUser(req, res) {
     try {
         const {email, password} = req.body;
+
+        // console.warn(`Recieved Email: ${email}; Recieved Pass: ${password}`);
         const user = await User.findOne({email});
 
-        if(!user) return res.status(404).json({msg: "User not found!"});
+        if(!user) return res.status(401).json({msg: "User not found!"});
 
         // if(!user.emailValidated) return res.status(403).json({msg: "You need to verify younoner Email before you can log in!"})
 

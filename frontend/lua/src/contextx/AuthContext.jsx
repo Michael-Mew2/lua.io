@@ -1,5 +1,6 @@
 import * as React from "react";
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const BASE_URL =
   /* process.env.REACT_APP_API_BASE_URL  ||  */ "http://localhost:3000";
@@ -15,9 +16,10 @@ export const AuthProvider = ({ children }) => {
 
   // Log in:
   const loginApi = async (email, password) => {
+    // console.warn(`authContext - Sending Email: ${email}; Sending Pass: ${password}`); // Debug
     try {
-      const response = await axios.post(
-        `${BASE_URL}/user/log`,
+      const response = await axiosInstance.post(
+        `/user/log`,
         { email, password },
         { withCredentials: true }, // wichtig für die cookies
       );
@@ -41,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     console.log("check Auth:", `${BASE_URL}/user/check`);
     try {
-      const response = await axios.get(`${BASE_URL}/user/check`, {
+      const response = await axiosInstance.get(`/user/check`, {
         withCredentials: true,
       });
 

@@ -41,17 +41,18 @@ export default function signInPage() {
 
   // ----- Log-In Function -----
   const handleLogin = async () => {
+    // console.warn(`handleLogin - Sending Email: ${form.values.email}; Sending Pass: ${form.values.password}`);
     try {
       await loginApi(form.values.email, form.values.password);
       notifications.show({
-        title: `Welcome back ${response.data.username}`,
-        message: `u rock!`,
+        title: `Welcome back.`,
+        message: `U rock!`,
         color: "green",
         icon: <IconCheck size={20} />,
       });
       navigate("/"); // Weiterleitung
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Login failed. Please Check your credentials"
+      const errorMessage = error.message || "Login failed. Please Check your credentials"
       notifications.show({
         title: "Error",
         message: errorMessage,
@@ -105,6 +106,7 @@ export default function signInPage() {
                   withAsterisk
                   radius="sm"
                   leftSection={<IconAt size={16} />}
+                  {...form.getInputProps("email")}
                 />
                 <PasswordInput
                   label="Password"
@@ -114,6 +116,7 @@ export default function signInPage() {
                   radius="sm"
                   mb="sm"
                   leftSection={<IconLock size={16} stroke={1.5} />}
+                  {...form.getInputProps("password")}
                 />
               </Stack>
             </Box>
