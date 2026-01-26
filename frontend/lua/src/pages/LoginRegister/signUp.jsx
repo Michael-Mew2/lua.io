@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contextx/AuthContext";
-import { registerApi } from "../../api/api";
+import { RegContext } from "../../contextx/RegContext";
 import {
   Grid,
   Container,
@@ -29,6 +28,7 @@ import {
   Stack,
   Badge,
   Avatar,
+  Typography,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DatePickerInput } from "@mantine/dates";
@@ -53,10 +53,23 @@ import {
 } from "@tabler/icons-react";
 import Background from "../../components/Background/Background";
 import BackgroundAnimation from "../../components/BackgroundAnimation/BackgroundAnimation";
+import { notifications } from "@mantine/notifications";
+import { de, pt, en, es, fr, it, ar, hi, cn } from "naughty-words";
 
 // ----------
 
 // Hilfsfunktion
+
+// Legal
+const CURRENT_AGB_VERSION = "v1.0.0-2026-01";
+const CURRENT_PRIVACY_POLICY_VERSION = "v1.0.0-2026-01";
+
+const allBadWords = [...new Set([...en, ...de, ...fr, ...es, ...it, ...pt])];
+const isUsernameOffensive = (username) => {
+  const lowerCaseUsername = username.toLowerCase();
+  const words = lowerCaseUsername.split(/[\s\-_]+/); // Korrigierter Regex
+  return words.some((word) => allBadWords.includes(word));
+};
 
 const planets = [
   "Earth",
@@ -132,6 +145,8 @@ export default function SignUp() {
 
   const [favoritePlanet, setFavoritePlanet] = React.useState("");
   const [favoriteColor, setFavoriteColor] = React.useState("#000000");
+  const { registerNewUser } = React.useContext(RegContext);
+  const navigate = useNavigate();
 
   const form = useForm({
     mode: "controlled",
@@ -154,8 +169,40 @@ export default function SignUp() {
         val.length < 6 ? "Password must be at least 6 characters" : null,
       confirmPassword: (val, values) =>
         val !== values.password ? "Passwords do not match" : null,
-      username: (val) =>
-        active === 1 && val.trim().length < 3 ? "Username too short" : null,
+      username: (val) => {
+        if (!val.trim()) return "Username is required!";
+        if (val.length < 3)
+          return "All good usernames have at least 3 characters";
+        if (val.length > 20)
+          return "This field is for your username, not your memoirs";
+        if (!/^[a-zA-Z0-9_]+$/.test(val))
+          return "Username can only contain letters, numbers, and underscores";
+        if (isUsernameOffensive(val))
+          return "Your username contains inappropriate content";
+        return null;
+      },
+      birthdate: (val) => {
+        if (!val) return "It's very important that you tell us your birthdate!";
+        const birthDate = new Date(val);
+        const today = new Date();
+        const minAge = new Date(
+          today.getFullYear() - 16,
+          today.getMonth(),
+          today.getDate(),
+        );
+        if (birthDate > today)
+          return "Welcome Timetraveler! I'm sure you are old enough in the future to enter, but right now you need to stay outside.";
+        if (birthDate > minAge)
+          return "You must be at least 16 years old to register!";
+        return null;
+      },
+      favoritePlanet: (val) =>
+        !val ? "You have to choose one from the list" : null,
+      favoriteColor: (val) => (!val ? "Please select a color" : null),
+      acceptedTerms: (val) =>
+        !val ? "You must accept the terms and conditions" : null,
+      acceptedDataAgreement: (val) =>
+        !val ? "You must accept the data agreement" : null,
     },
   });
 
@@ -226,12 +273,25 @@ export default function SignUp() {
         setActive((current) => current + 1);
       }
     } else if (active === 1) {
-      const result = form.validateField("username");
-      if (!result.hasErrors) {
+      const resultUsername = form.validateField("username");
+      const resultBirthdate = form.validateField("birthdate");
+
+      if (!resultUsername.hasError && !resultBirthdate.hasError) {
         setActive((current) => current + 1);
       }
-    } else {
-      setActive((current) => (current < 3 ? current + 1 : current));
+    } else if (active === 2) {
+      const resultPlanet = form.validateField("favoritePlanet");
+      const resultColor = form.validateField("favoriteColor");
+
+      if (!resultPlanet.hasError && !resultColor.hasError) {
+        setActive((current) => current + 1);
+      }
+    } else if (active === 3) {
+      const resultTerms = form.validateField("acceptedTerms");
+      const resultData = form.validateField("acceptedDataAgreement");
+      if (!resultTerms.hasError && !resultData.hasError) {
+        setActive((current) => current + 1);
+      }
     }
   };
 
@@ -240,7 +300,6 @@ export default function SignUp() {
 
   // ---------
   // Passwort Anforderungen
-  const navigate = useNavigate();
 
   const checks = requirements.map((requirement, index) => (
     <PasswordRequirement
@@ -254,6 +313,45 @@ export default function SignUp() {
   const strengthColor =
     strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
 
+  // ---------
+  // Registrieren:
+  const handleRegister = async () => {
+    try {
+      const userData = {
+        email: form.values.email,
+        password: form.values.password,
+        username: form.values.username,
+        birthdate: form.values.birthdate,
+        favoritePlanet: form.values.favoritePlanet,
+        favoriteColor: form.values.favoriteColor,
+        badges: form.values.badges || [],
+
+        agb_accepted_at: new Date().toISOString(),
+        agb_version: CURRENT_AGB_VERSION,
+        privacy_accepted_at: new Date().toISOString(),
+        privacy_version: CURRENT_PRIVACY_POLICY_VERSION,
+      };
+
+      await registerNewUser(userData);
+
+      notifications.show({
+        title: "Success",
+        message:
+          "A verification email has been sent to your email address. Please verify your email to complete the registration.",
+        color: "green",
+        icon: <IconCheck size={20} />,
+      });
+
+      navigate("/sign-in"); // Weiterleitung
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: error.message,
+        color: "red",
+        icon: <IconX size={20} />,
+      });
+    }
+  };
   // ---------
 
   const emailIcon = <IconAt size={16} />;
@@ -355,11 +453,12 @@ export default function SignUp() {
                 <DatePickerInput
                   clearable
                   withAsterisk
-                  dropdownType="modal"
+                  // dropdownType="modal"
                   label="Birthdate"
                   description="Why do you need to enter your Birthdate?"
                   placeholder="Enter your Birthday"
                   leftSection={<IconCalendar size={16} stroke={1.5} />}
+                  maxDate={new Date()}
                   {...form.getInputProps("birthdate")}
                 />
               </Stack>
@@ -371,9 +470,9 @@ export default function SignUp() {
               <Stack gap={generalGap}>
                 {/* label="Step 3" description="What do you like" */}
                 <NativeSelect
+                  label="Favorite Planet"
                   withAsterisk
                   leftSection={<IconNorthStar size={16} stroke={1.5} />}
-                  label="Favorite Planet"
                   description="Choose your favorite Planet"
                   data={planets}
                   {...form.getInputProps("favoritePlanet")}
@@ -423,46 +522,42 @@ export default function SignUp() {
               <Stack gap={generalGap}>
                 {" "}
                 {/* label="Step 4" description="The legal Stuff" */}
-                <Checkbox.Group
+                <Checkbox
                   mt="sm"
-                  label="Do you accept our Terms and Conditions?"
-                  withAsterisk
-                >
-                  <Checkbox
-                    mt="sm"
-                    label={
-                      <>
-                        I have read and accept the{" "}
-                        <Anchor target="_blank" inherit>
-                          Terms and Conditions
-                        </Anchor>
-                      </>
-                    }
-                    {...form.getInputProps("acceptedTerms", {
-                      type: "checkbox",
-                    })}
-                  />
-                </Checkbox.Group>
-                <Checkbox.Group
+                  label={
+                    <>
+                      I have read and accept the{" "}
+                      <Anchor target="_blank" inherit>
+                        Terms and Conditions
+                      </Anchor>
+                    </>
+                  }
+                  checked={form.values.acceptedTerms}
+                  onChange={(event) =>
+                    form.setFieldValue(
+                      "acceptedTerms",
+                      event.currentTarget.checked,
+                    )
+                  }
+                />
+                <Checkbox
                   mt="sm"
-                  label="Do you accept our Data agreement?"
-                  withAsterisk
-                >
-                  <Checkbox
-                    mt="sm"
-                    label={
-                      <>
-                        I have read and accept the{" "}
-                        <Anchor target="_blank" inherit>
-                          Data agreement
-                        </Anchor>
-                      </>
-                    }
-                    {...form.getInputProps("acceptedDataAgreement", {
-                      type: "checkbox",
-                    })}
-                  />
-                </Checkbox.Group>
+                  label={
+                    <>
+                      I have read and accept the{" "}
+                      <Anchor target="_blank" inherit>
+                        Data agreement
+                      </Anchor>
+                    </>
+                  }
+                  checked={form.values.acceptedDataAgreement}
+                  onChange={(event) =>
+                    form.setFieldValue(
+                      "acceptedDataAgreement",
+                      event.currentTarget.checked,
+                    )
+                  }
+                />
                 <Blockquote color="violet" p="sm" mt="lg">
                   Accepting this is like signing a contract, so please read
                   these contracts carefully!
@@ -470,6 +565,17 @@ export default function SignUp() {
               </Stack>
             </Stepper.Step>
             {/* ----- End of Step 4 ----- */}
+
+            {/* ----- Step 5 ----- */}
+            <Stepper.Step>
+              <Stack>
+                <Title order={3}>Almost Done!</Title>
+                <Typography>
+                  Please make sure everything is right in order to proceed with
+                  your registration.
+                </Typography>
+              </Stack>
+            </Stepper.Step>
           </Stepper>
 
           {/* ----- Buttons ----- */}
@@ -484,9 +590,17 @@ export default function SignUp() {
                   Back
                 </Button>
               )}
-              {active !== 4 && (
+              {active < 4 ? (
                 <Button variant="filled" color="violet" onClick={nextStep}>
                   Next step
+                </Button>
+              ) : (
+                <Button
+                  variant="filled"
+                  color="violet"
+                  onClick={handleRegister}
+                >
+                  Submit
                 </Button>
               )}
             </Group>

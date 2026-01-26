@@ -3,10 +3,12 @@ import Routing from "./components/Routing/Routing";
 
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
 import { MantineProvider } from "@mantine/core";
-import { Notifications} from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import "./App.css";
 import { AuthProvider } from "./contextx/AuthContext";
+import { RegProvider } from "./contextx/RegContext";
 import { SongProvider } from "./contextx/SongContext";
 
 function App() {
@@ -14,13 +16,15 @@ function App() {
     <>
       <MantineProvider>
         <Notifications />
-          <BrowserRouter>
-            <AuthProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <RegProvider>
               <SongProvider>
                 <Routing />
               </SongProvider>
-            </AuthProvider>
-          </BrowserRouter>
+            </RegProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </MantineProvider>
     </>
   );
