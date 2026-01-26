@@ -3,9 +3,10 @@ import { generateToken } from "../middleware/jwt.js";
 import nodemailer from "nodemailer";
 import { sendVerificationMail } from "../services/nodemailer.js";
 import { verifyToken } from "../middleware/jwt.js";
-import {en, de, fr, es, it, pt, jp, ar, ru, uk, zh, pl, ko, cn, hi} from "naughty-words"
+import * as crypto from 'crypto';
+import {en, de, fr, es, it, pt, zh, ar, ru, pl, ko, hi} from "naughty-words"
 
-const allBadWords = [...new Set([...en, ...de, ...fr, ...es, ...it, ...pt, ...jp, ...ar, ...ru, ...uk, ...zh, ...pl, ...ko, ...cn, ...hi])];
+const allBadWords = [...new Set([...en, ...de, ...fr, ...es, ...it, ...pt, ...zh, ...ar, ...ru, ...pl, ...ko, ...hi])];
 
 const isUsernameOffensive = (username) => {
     const lowerCaseUsername = username.toLowerCase();
@@ -19,6 +20,10 @@ export async function createUser(req, res) {
         const {username, email} = req.body
         console.log({username, email});
         
+        if (isUsernameOffensive(username)) {
+            console.log("Username is offensive");
+            return res.status(400).json({msg: `Username contains inappropriate content ${username}`})
+        }
 
         const existingUser = await User.findOne({email});
         const usernameUsed = await User.findOne({username});
@@ -27,23 +32,29 @@ export async function createUser(req, res) {
         if(existingUser) {
             console.log("User already exists");
             
-            return res.status(409).json({msg: "User already exists"})
+            return res.status(409).json({msg: "User already exists, please try to log in. You can also reset your password if you have forgotten it."})
         }
 
         if(usernameUsed) {
             console.log("Username already taken");
             
-            return res.status(226).json({msg: "Username already taken"})
+            return res.status(226).json({msg: "Username already taken. Please choose another username."})
         }
         
         const newUser = await User.create(req.body);
         console.log("newuser:", newUser);
-        const token = generateToken({userId: newUser.id})
 
+        const token = generateToken({userId: newUser.id})
         console.log(token);
         
+        const emailToken = crypto.randomBytes(52).toString("hex");
+        newUser.validationToken = emailToken
+        await newUser.save();
+
+        await sendVerificationMail(newUser, emailToken);
+        
         // await sendVerificationMail(newUser);
-        res.cookie("jwt", token, {httpOnly:true, secure: true, sameSite: "lax", maxAge: 60*60*1000}).status(201).json({msg: "User was created", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
+        res.cookie("jwt", token, {httpOnly:true, secure: true, sameSite: "lax", maxAge: 60*60*1000}).status(201).json({msg: "User was created. A verification email has been sent!", newUser}) // Hier wird ein Cookie erstellt, damit man nach dem einloggen sofort auf das Dashboard kommt, für die Zukunft rausnehmen!!
     } catch (error) {
         console.log("error in createUser:", error);
         
@@ -59,6 +70,7 @@ export async function loginUser(req, res) {
         const user = await User.findOne({email});
 
         if(!user) return res.status(401).json({msg: "User not found!"});
+        if(!user.emailValidated) return res.status(403).json({msg: "You need to verify your email before you can log in!"});
 
         // if(!user.emailValidated) return res.status(403).json({msg: "You need to verify younoner Email before you can log in!"})
 

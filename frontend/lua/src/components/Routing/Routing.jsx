@@ -8,6 +8,7 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import MusicShare from "../../pages/MusicShare/MusicShare";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import SongDetails from "../../pages/SongDetails/SongDetails";
+import VerifyEmail from "../../pages/VerifyEmail/VerifyEmail";
 
 export default function Routing() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Routing() {
           <Route index element={<Home />} />
           <Route path="sign-in" element={<SignIn />} />
           <Route path="sign-up" element={<SignUp />} />
+          <Route path="verify-email" element={<VerifyEmail />} />
           <Route path="members" element={<ProtectedRoute />}>
             <Route path="dash" element={<Dashboard />} />
             <Route path="music" element={<MusicShare />} />

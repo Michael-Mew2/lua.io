@@ -14,14 +14,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendVerificationMail(user) {
+export async function sendVerificationMail(user, token) {
   try {
-    const token = crypto.randomBytes(52).toString("hex");
-    console.log(token);
-
-    await User.findByIdAndUpdate(user._id, { validationToken: token });
-
-    const verificationLink = `${process.env.SITE_URL}/?token=${token}`;  // ändern sobald in react!!
+    const verificationLink = `${process.env.SITE_URL}/verify-email?token=${token}`;  //ändern sobald in react!!
 
     const mailOptions = {
       from: `"🌙 lua.io"<${process.env.EMAIL}>`,
