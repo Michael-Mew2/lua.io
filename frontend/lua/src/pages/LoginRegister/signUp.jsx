@@ -28,7 +28,7 @@ import {
   Stack,
   Badge,
   Avatar,
-  Typography
+  Typography,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DatePickerInput } from "@mantine/dates";
@@ -68,7 +68,7 @@ const allBadWords = [...new Set([...en, ...de, ...fr, ...es, ...it, ...pt])];
 const isUsernameOffensive = (username) => {
   const lowerCaseUsername = username.toLowerCase();
   const words = lowerCaseUsername.split(/[\s\-_]+/); // Korrigierter Regex
-  return words.some(word => allBadWords.includes(word));
+  return words.some((word) => allBadWords.includes(word));
 };
 
 const planets = [
@@ -198,12 +198,11 @@ export default function SignUp() {
       },
       favoritePlanet: (val) =>
         !val ? "You have to choose one from the list" : null,
-      favoriteColor: (val) =>
-        !val ? "I know the selection isn't huge, but please choose one." : null,
+      favoriteColor: (val) => (!val ? "Please select a color" : null),
       acceptedTerms: (val) =>
-        val !== true ? "You must accept the terms and conditions" : null,
+        !val ? "You must accept the terms and conditions" : null,
       acceptedDataAgreement: (val) =>
-        val !== true ? "You must accept the data agreement" : null,
+        !val ? "You must accept the data agreement" : null,
     },
   });
 
@@ -291,7 +290,7 @@ export default function SignUp() {
       const resultTerms = form.validateField("acceptedTerms");
       const resultData = form.validateField("acceptedDataAgreement");
       if (!resultTerms.hasError && !resultData.hasError) {
-       setActive((current => current +1));
+        setActive((current) => current + 1);
       }
     }
   };
@@ -337,7 +336,8 @@ export default function SignUp() {
 
       notifications.show({
         title: "Success",
-        message: "A verification email has been sent to your email address. Please verify your email to complete the registration.",
+        message:
+          "A verification email has been sent to your email address. Please verify your email to complete the registration.",
         color: "green",
         icon: <IconCheck size={20} />,
       });
@@ -569,8 +569,11 @@ export default function SignUp() {
             {/* ----- Step 5 ----- */}
             <Stepper.Step>
               <Stack>
-                  <Title order={3}>Almost Done!</Title>
-                  <Typography>Please make sure everything is right in order to proceed with your registration.</Typography>
+                <Title order={3}>Almost Done!</Title>
+                <Typography>
+                  Please make sure everything is right in order to proceed with
+                  your registration.
+                </Typography>
               </Stack>
             </Stepper.Step>
           </Stepper>

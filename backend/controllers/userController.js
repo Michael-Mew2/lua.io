@@ -3,6 +3,15 @@ import { generateToken } from "../middleware/jwt.js";
 import nodemailer from "nodemailer";
 import { sendVerificationMail } from "../services/nodemailer.js";
 import { verifyToken } from "../middleware/jwt.js";
+import {en, de, fr, es, it, pt, jp, ar, ru, uk, zh, pl, ko, cn, hi} from "naughty-words"
+
+const allBadWords = [...new Set([...en, ...de, ...fr, ...es, ...it, ...pt, ...jp, ...ar, ...ru, ...uk, ...zh, ...pl, ...ko, ...cn, ...hi])];
+
+const isUsernameOffensive = (username) => {
+    const lowerCaseUsername = username.toLowerCase();
+    const words = lowerCaseUsername.split(/[\s\-_]+/); // Korrigierter Regex
+    return words.some((word) => allBadWords.includes(word));
+}
 
 export async function createUser(req, res) {
     try {
