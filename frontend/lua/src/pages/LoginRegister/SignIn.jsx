@@ -101,7 +101,7 @@ export default function signInPage() {
               <Stack gap={generalGap}>
                 <TextInput
                   label="Email"
-                  description="Enter the emailo adress you registered with"
+                  description="Enter the email-address you registered with"
                   placeholder="john@the-moon.de"
                   withAsterisk
                   radius="sm"

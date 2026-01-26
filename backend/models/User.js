@@ -39,7 +39,11 @@ const userSchema = new Schema({
   emailValidated: {
     type: Boolean,
     default: false
-  }
+  },
+  agb_accepted_at: String,
+  agb_version: String,
+  privacy_accepted_at: String,
+  privacy_version: String
 });
 
 userSchema.pre("save", async function (next) {
