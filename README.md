@@ -1,9 +1,9 @@
-# lua.io
+# tononónimo.eu
 
-## What is lua.io
-lua.io is a plattform where you can share and discover unique tracks.
+## What is tononónimo.eu (formerly knwn as project lua.io)?
+Tononónimo is a plattform where you can share and discover unique tracks with other users anonymously.
 
-## How does lua.io work
+## How does Tononónimo work
 Just log in, take the link of your favorite song from either spotify or deezer and share it with the world, in return you'll get an unique song yourself! That's it
 
 ## backend-routes
