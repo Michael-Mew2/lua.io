@@ -29,6 +29,16 @@
   align-items: center;
 }
 
+.logo {
+  b {
+    color: var(--mantine-color-white);
+    font-family: "Intel One Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+}
+
 .link {
   display: block;
   line-height: 1;
