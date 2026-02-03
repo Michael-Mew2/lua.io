@@ -1,7 +1,10 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // Zum Weiterleiten auf eine andere Seite
+import * as React from "react";
+import { Flex, Stack } from "@mantine/core";
+import { useNavigate, useParams } from "react-router-dom"; // Zum Weiterleiten auf eine andere Seite
+import DashboardProfileCard from "../../components/DashboardProfileCard/DashboardProfileCard";
 
 export default function Dashboard() {
+  const {username} = useParams();
   const navigate = useNavigate();
 
   const startGame = () => {
@@ -9,6 +12,10 @@ export default function Dashboard() {
   };
 
   return (
-    <>hi</>
+    <>
+    <Stack>
+      <DashboardProfileCard />
+    </Stack>
+    </>
   );
 }

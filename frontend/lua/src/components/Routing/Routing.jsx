@@ -24,10 +24,10 @@ export default function Routing() {
           <Route path="sign-in" element={<SignIn />} />
           <Route path="sign-up" element={<SignUp />} />
           <Route path="verify-email" element={<VerifyEmail />} />
-          <Route path="members" element={<ProtectedRoute />}>
-            <Route path="dash" element={<Dashboard />} />
-            <Route path="music" element={<MusicShare />} />
-            <Route path="claim" element={<SongDetails />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="members/:username" element={<Dashboard />} />
+            <Route path="members/:username/music" element={<MusicShare />} />
+            <Route path="member/:username/claim" element={<SongDetails />} />
           </Route>
         </Route>
       </Routes>
