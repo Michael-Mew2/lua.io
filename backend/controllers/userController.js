@@ -115,12 +115,17 @@ export async function loginUser(req, res) {
 
     const token = generateToken({ userId: user._id });
 
-    const formattedBirthdate = user.birthdate
-      ? new Date(user.birthdate).toLocaleDateString("de-DE", {
-          day: "2-digit",
-          month: "2-digit",
-        })
-      : null;
+    let formattedBirthdate = "unknown";
+    if (user.birthdate) {
+      const date = new Date(user.birthdate);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      formattedBirthdate = `${day}.${month}`;
+      console.log("Original Birthdate:", user.birthdate);
+      console.log("Parsed Date:", date);
+      console.log("Formatted Birthdate:", formattedBirthdate);
+    }
+
 
     return res
       .status(200)
