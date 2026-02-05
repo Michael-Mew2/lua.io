@@ -11,7 +11,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    // unique: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -43,7 +43,9 @@ const userSchema = new Schema({
   agb_accepted_at: String,
   agb_version: String,
   privacy_accepted_at: String,
-  privacy_version: String
+  privacy_version: String,
+  badges: Array,
+  referral: String
 });
 
 userSchema.pre("save", async function (next) {

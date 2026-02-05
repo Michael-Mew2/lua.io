@@ -322,8 +322,8 @@ export default function SignUp() {
         password: form.values.password,
         username: form.values.username,
         birthdate: form.values.birthdate,
-        favoritePlanet: form.values.favoritePlanet,
-        favoriteColor: form.values.favoriteColor,
+        profilePic: form.values.favoritePlanet,
+        color: form.values.favoriteColor,
         badges: form.values.badges || [],
 
         agb_accepted_at: new Date().toISOString(),

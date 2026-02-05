@@ -43,14 +43,14 @@ export default function signInPage() {
   const handleLogin = async () => {
     // console.warn(`handleLogin - Sending Email: ${form.values.email}; Sending Pass: ${form.values.password}`);
     try {
-      await loginApi(form.values.email, form.values.password);
+      const response = await loginApi(form.values.email, form.values.password);
       notifications.show({
         title: `Welcome back.`,
         message: `U rock!`,
         color: "green",
         icon: <IconCheck size={20} />,
       });
-      navigate("/"); // Weiterleitung
+      navigate(`/members/${response.user.username}`); // Weiterleitung
     } catch (error) {
       const errorMessage = error.message || "Login failed. Please Check your credentials"
       notifications.show({
