@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 317 316">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        isolation: isolate;
+      }
+
+      .cls-3 {
+        opacity: .2;
+      }
+
+      .cls-4 {
+        mix-blend-mode: multiply;
+        opacity: .75;
+      }
+    </style>
+  </defs>
+  <g class="cls-2">
+    <g id="Ebene_2" data-name="Ebene 2">
+      <g id="Ebene_1-2" data-name="Ebene 1">
+        <g id="Tononónimo-icon-solo">
+          <g>
+            <g class="cls-3">
+              <image class="cls-4" width="317" height="316" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT0AAAE8CAYAAACyx2Y4AAAACXBIWXMAAAsSAAALEgHS3X78AAABm0lEQVR4nO3BMQEAAADCoPVPbQlPoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgYx7GAAFoHoDSAAAAAElFTkSuQmCC"/>
+            </g>
+            <g>
+              <rect class="cls-1" x="57" y="59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="95.74" y="59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="173.22" y="59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="211.96" y="59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="57" y="78.37" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="95.74" y="78.37" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="78.37" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="173.22" y="78.37" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="211.96" y="78.37" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="57" y="97.74" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="97.74" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="211.96" y="97.74" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="117.11" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="211.96" y="117.11" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="136.48" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="155.85" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="175.22" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="194.59" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="213.96" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+              <rect class="cls-1" x="134.48" y="233.33" width="34.02" height="14.65" rx="3.78" ry="3.78"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

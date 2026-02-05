@@ -9,6 +9,8 @@ export default function Dashboard() {
   };
 
   return (
-    <>hi</>
+    <>
+    Try to create a Dashboard, which is build up by components
+    </>
   );
 }
