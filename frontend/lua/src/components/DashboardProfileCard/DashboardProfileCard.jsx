@@ -17,13 +17,15 @@ export default function DashboardProfileCard() {
         >
           <Group className={classes.userProfile}>
             <UserProfilePicture />
-            <Stack>
-              <Text className={classes.username}>{user?.username}</Text>
-              <Group className={classes.badges}>
-                <Badge>Badge 1</Badge>
-                <Badge>Badge 2</Badge>
-                <Badge>Badge 3</Badge>
-              </Group>
+            <Stack gap="xs">
+              <Title order={2} className={classes.username}>{user?.username}</Title>
+              {user?.badges && (
+                <Group className={classes.badges}>
+                  {user?.badges.map((badge, index) => (
+                    <Badge key={index} size="xs" color="#4a5167">{badge}</Badge>
+                  ))}
+                </Group>
+              )}
               <Text className={classes.birthdate}>
                 Birthday: {user?.birthdate}
               </Text>

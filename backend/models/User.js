@@ -43,7 +43,8 @@ const userSchema = new Schema({
   agb_accepted_at: String,
   agb_version: String,
   privacy_accepted_at: String,
-  privacy_version: String
+  privacy_version: String,
+  badges: Array
 });
 
 userSchema.pre("save", async function (next) {
