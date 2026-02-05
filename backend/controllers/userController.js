@@ -147,6 +147,7 @@ export async function loginUser(req, res) {
           emailValidated: user.emailValidated,
           listenedSongs: user.listenedSongs,
           suggestedSongs: user.suggestedSongs,
+          referral: user.referral,
         },
       });
   } catch (error) {
@@ -222,6 +223,7 @@ export async function checkAuthStatus(req, res) {
         emailValidated: user.emailValidated,
         listenedSongs: user.listenedSongs,
         suggestedSongs: user.suggestedSongs,
+        referral: user.referral
       },
     });
   } catch (error) {

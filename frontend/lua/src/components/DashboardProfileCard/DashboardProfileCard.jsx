@@ -1,8 +1,19 @@
 import * as React from "react";
-import { Container, Group, Title, Stack, Text, Badge } from "@mantine/core";
+import {
+  Container,
+  Group,
+  Title,
+  Stack,
+  Text,
+  Badge,
+  Divider,
+  Rating,
+} from "@mantine/core";
 import classes from "./DashboardProfileCard.module.css";
 import UserProfilePicture from "../UserProfilePicture/UserProfilePicture";
 import { AuthContext } from "../../contextx/AuthContext";
+import DashboardProfileCardTasteRating from "../DashboardProfileCardTasteRating/DashboardProfileCardTasteRating";
+import DashboardProfileCardFeedbackRating from "../DashboardProfileCardFeedbackRating/DashboardProfileCardFeedbackRating";
 
 export default function DashboardProfileCard() {
   const { user } = React.useContext(AuthContext);
@@ -17,21 +28,36 @@ export default function DashboardProfileCard() {
         >
           <Group className={classes.userProfile}>
             <UserProfilePicture />
-            <Stack gap="xs">
-              <Title order={2} className={classes.username}>{user?.username}</Title>
+            <Stack gap="xs" className={classes.generalInfo}>
+              <Title order={2} className={classes.username}>
+                {user?.username}
+              </Title>
               {user?.badges && (
                 <Group className={classes.badges}>
                   {user?.badges.map((badge, index) => (
-                    <Badge key={index} size="xs" color="#4a5167">{badge}</Badge>
+                    <Badge key={index} size="xs" color="#4a5167">
+                      {badge}
+                    </Badge>
                   ))}
                 </Group>
               )}
-              <Text className={classes.birthdate}>
-                Birthday: {user?.birthdate}
-              </Text>
+              <Group className={classes.birthdateAndReferral} mt={2} gap="xs">
+                <Text className={classes.birthdate}>
+                  Birthday: {user?.birthdate}
+                </Text>
+                {user?.referral && (
+                  <Text className={classes.referral}>
+                    Joined thanks to <Text fw={700} span> {user?.referral}</Text>
+                  </Text>
+                )}
+              </Group>
             </Stack>
           </Group>
-          <Title order={1}>Hi there!</Title>
+          <Group wrap="no-wrap">
+            <DashboardProfileCardTasteRating />
+            <Divider size="sm" orientation="vertical" />
+            <DashboardProfileCardFeedbackRating/>
+          </Group>
         </Group>
       </Container>
     </div>
