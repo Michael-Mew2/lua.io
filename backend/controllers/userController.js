@@ -120,12 +120,11 @@ export async function loginUser(req, res) {
       const date = new Date(user.birthdate);
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0");
-      formattedBirthdate = `${day}.${month}`;
+      formattedBirthdate = `${day}.${month}.`;
       console.log("Original Birthdate:", user.birthdate);
       console.log("Parsed Date:", date);
       console.log("Formatted Birthdate:", formattedBirthdate);
     }
-
 
     return res
       .status(200)
@@ -145,6 +144,9 @@ export async function loginUser(req, res) {
           tokens: user.tokens,
           badges: user.badges,
           birthdate: formattedBirthdate,
+          emailValidated: user.emailValidated,
+          listenedSongs: user.listenedSongs,
+          suggestedSongs: user.suggestedSongs,
         },
       });
   } catch (error) {
@@ -199,7 +201,29 @@ export async function checkAuthStatus(req, res) {
     const user = await User.findById(decoded.userId);
     if (!user) return res.status(404).json({ msg: "User not found!" });
 
-    return res.status(200).json({ msg: "Authenticated", user });
+    let formattedBirthdate = "unknown";
+    if (user.birthdate) {
+      const date = new Date(user.birthdate);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      formattedBirthdate = `${day}.${month}.`;
+    }
+
+    return res.status(200).json({
+      msg: "User authenticated!",
+      user: {
+        id: user._id,
+        username: user.username,
+        profilePic: user.profilePic,
+        color: user.color,
+        tokens: user.tokens,
+        badges: user.badges,
+        birthdate: formattedBirthdate,
+        emailValidated: user.emailValidated,
+        listenedSongs: user.listenedSongs,
+        suggestedSongs: user.suggestedSongs,
+      },
+    });
   } catch (error) {
     console.error("Auth check error:", error);
     res.status(500).json({ msg: "Error checking authentication!" });
