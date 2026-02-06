@@ -27,7 +27,7 @@ export default function Routing() {
           <Route element={<ProtectedRoute />}>
             <Route path="members/:username" element={<Dashboard />} />
             <Route path="members/:username/music" element={<MusicShare />} />
-            <Route path="member/:username/claim" element={<SongDetails />} />
+            <Route path="members/:username/claim" element={<SongDetails />} />
           </Route>
         </Route>
       </Routes>
