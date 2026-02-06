@@ -75,12 +75,14 @@ const SortableItems = ({ song, index }) => {
       <Skeleton height={50} width={50} radius="sm" />
       <Box style={{ flex: 1 }}>
         <Text fw={500}>{song.title}</Text>
-        <Text size="sm" c="dimmed">
-          {song.artist}
-        </Text>
-        <Badge variant="light" mt={4}>
-          {song.genre}
-        </Badge>
+        <Group>
+          <Text size="sm" c="dimmed">
+            {song.artist}
+          </Text>
+          <Badge variant="light" mt={4}>
+            {song.genre}
+          </Badge>
+        </Group>
       </Box>
       {!song.isNew && <Text>{index + 1}</Text>}
     </Group>
@@ -159,7 +161,7 @@ export default function DashboardMainRanking() {
   const allSongs = newSong ? [newSong, ...songs] : songs;
 
   return (
-    <Box miw={300} mah={600} style={{ overflowY: "auto" }}>
+    <Box miw={300} mah={600}>
       <Title order={4}>My top 10</Title>
       <DndContext
         sensors={sensors}
