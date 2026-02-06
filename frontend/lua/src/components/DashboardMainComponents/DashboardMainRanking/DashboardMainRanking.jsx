@@ -54,18 +54,17 @@ const initialSongs = [
 
 // Sortierbare Items erstellen:
 const SortableItems = ({ song, index }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+  const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: song.id });
 
   const style = {
-    transform: isDragging && transform ? `translateY(${transform.y}px)` : "none",
-    transition: isDragging ? "transform 0.2s ease-in-out" : "none",
+    transform: transform ? `translateY(${transform.y}px)` : "none",
+    transition: "transform 0.2s ease-in-out",
     border: "1px solid #eee",
     borderRadius: "4px",
     marginBottom: "0.75rem",
     padding: "0.75rem",
     backgroundColor: song.isNew ? "#b8b8b8" : "white",
-    zIndex: isDragging ? 1000 : "auto"
   };
 
   return (
@@ -107,9 +106,9 @@ export default function DashboardMainRanking() {
 
     // Wenn neuer Song einsortiert wird:
     if (active.id === newSong?.id && over) {
-      const overIndex = songs.findIndex((song) => song.id === over.id);
-      const adjustedIndex = overIndex >= 0 ? overIndex : songs.length;
-      insertNewSong(adjustedIndex);
+      const allItems = newSong ? [newSong, ...songs] : songs;
+      const overIndex = allItems.findIndex((song) => song.id === over.id);
+      insertNewSong(overIndex);
       return;
     }
 
@@ -144,15 +143,20 @@ export default function DashboardMainRanking() {
   const insertNewSong = (index) => {
     if (!newSong) return;
     const updatedSongs = [...songs];
-    updatedSongs.splice(index, 0, { ...newSong, isNew: false }); // Neuen Song an gewünschte Position hinzufügen
+    // Wenn der neue Song an die letzte Position gezogen wird
+    if (index >= updatedSongs.length) {
+      updatedSongs.push({ ...newSong, isNew: false });
+    } else {
+      updatedSongs.splice(index, 0, { ...newSong, isNew: false });
+    }
     if (updatedSongs.length > 10) {
-      updatedSongs.pop(); // Entferne letztplatzierten Song, wenn Liste voll ist
+      updatedSongs.pop();
     }
     setSongs(updatedSongs);
     setNewSong(null); // Neuen Song zurcksetzten
   };
 
-  // const allSongs = newSong ? [newSong, ...songs] : songs;
+  const allSongs = newSong ? [newSong, ...songs] : songs;
 
   return (
     <Box miw={300} mah={600} style={{ overflowY: "auto" }}>
@@ -164,7 +168,7 @@ export default function DashboardMainRanking() {
         modifiers={[restrictToVerticalAxis]}
       >
         <SortableContext
-          items={newSong ? [newSong, ...songs]: songs}
+          items={newSong ? [newSong, ...songs] : songs}
           strategy={verticalListSortingStrategy}
         >
           {newSong && (
