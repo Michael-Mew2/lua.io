@@ -10,6 +10,7 @@ import "./App.css";
 import { AuthProvider } from "./contextx/AuthContext";
 import { RegProvider } from "./contextx/RegContext";
 import { SongProvider } from "./contextx/SongContext";
+import { ShareSongProvider } from "./contextx/ShareSongContext";
 
 function App() {
   return (
@@ -19,9 +20,11 @@ function App() {
         <BrowserRouter>
           <AuthProvider>
             <RegProvider>
-              <SongProvider>
-                <Routing />
-              </SongProvider>
+              <ShareSongProvider>
+                <SongProvider>
+                  <Routing />
+                </SongProvider>
+              </ShareSongProvider>
             </RegProvider>
           </AuthProvider>
         </BrowserRouter>

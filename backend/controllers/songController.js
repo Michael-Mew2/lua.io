@@ -12,7 +12,9 @@ import User from "../models/User.js";
 
 export const processSongLink = async (req, res) => {
   try {
+    /* console.log(req.body); */
     const { link } = req.body;
+    
 
     if (!link) {
       return res.status(400).json({ msg: "Please enter a valid Link" });

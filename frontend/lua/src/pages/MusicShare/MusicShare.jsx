@@ -1,47 +1,24 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { SimpleGrid, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import SongShareInator from "../../components/SongSharingComponents/SongShareInator/SongShareInator";
+import SharedSongPreview from "../../components/SongSharingComponents/SharedSongPreview/SharedSongPreview";
 
 export default function MusicShare() {
-  const [url, setUrl] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const BASE_URL = "http://localhost:3000";
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setMessage("");
-
-    // console.log(url);
-    
-    try {
-      const response = await fetch(`${BASE_URL}/song/input`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ link: url }),
-        credentials: "include", // Session-Cookie senden
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        navigate(`/members/claim`); // Weiterleitung zur Song-Seite mit der ID des Songs
-      } else {
-        setMessage(data.msg); // Fehlermeldung anzeigen
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [sharedSong, setSharedSong] = React.useState(null);
 
   return (
-    <>hi</>
+    <>
+    <SimpleGrid cols={{ base: 1, md: 2 }}>
+      {sharedSong ? (
+        <SharedSongPreview song={sharedSong} />
+      ) : (
+        <SongShareInator onSongShared={setSharedSong} />
+      )}
+      <Title order={2}>
+        How to share a Song:
+      </Title>
+    </SimpleGrid>
+    </>
   );
 }
