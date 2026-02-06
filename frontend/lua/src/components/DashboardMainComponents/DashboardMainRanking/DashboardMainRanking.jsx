@@ -54,17 +54,18 @@ const initialSongs = [
 
 // Sortierbare Items erstellen:
 const SortableItems = ({ song, index }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: song.id });
 
   const style = {
-    transform: transform ? `translateY(${transform.y}px)` : "none",
-    transition: "transform 0.2s ease-in-out",
+    transform: isDragging && transform ? `translateY(${transform.y}px)` : "none",
+    transition: isDragging ? "transform 0.2s ease-in-out" : "none",
     border: "1px solid #eee",
     borderRadius: "4px",
     marginBottom: "0.75rem",
     padding: "0.75rem",
     backgroundColor: song.isNew ? "#b8b8b8" : "white",
+    zIndex: isDragging ? 1000 : "auto"
   };
 
   return (
@@ -107,7 +108,7 @@ export default function DashboardMainRanking() {
     // Wenn neuer Song einsortiert wird:
     if (active.id === newSong?.id && over) {
       const overIndex = songs.findIndex((song) => song.id === over.id);
-      const adjustedIndex = overIndex > 0 ? overIndex - 1 : 0;
+      const adjustedIndex = overIndex >= 0 ? overIndex : songs.length;
       insertNewSong(adjustedIndex);
       return;
     }
