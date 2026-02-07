@@ -47,6 +47,8 @@ export const ShareSongProvider = ({ children }) => {
         { motivation, language, genres },
         { withCredentials: true },
       );
+      //console.log("addMotivation Api Response:", response.data);
+      
       return response.data;
     } catch (error) {
       const errorMsg =
@@ -54,7 +56,7 @@ export const ShareSongProvider = ({ children }) => {
       setError(errorMsg);
       throw new Error(errorMsg);
     } finally {
-      setLoading(False);
+      setLoading(false);
     }
   };
 

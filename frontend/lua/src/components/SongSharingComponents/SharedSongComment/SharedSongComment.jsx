@@ -59,6 +59,9 @@ export default function SharedSongComment({ song }) {
           form.values.language,
           form.values.genres,
         );
+
+        //console.log("ShareSongComment-handelSubmit:", response);
+        
         notifications.show({
           title: `Thank you!.`,
           message: `Your message has been added to the song.`,
