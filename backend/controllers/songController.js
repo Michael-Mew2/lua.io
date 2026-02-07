@@ -12,6 +12,7 @@ import User from "../models/User.js";
 
 export const processSongLink = async (req, res) => {
   try {
+    /* console.log(req.body); */
     const { link } = req.body;
 
     if (!link) {
@@ -27,10 +28,10 @@ export const processSongLink = async (req, res) => {
         try {
           const deezerData = await searchDeezerSong(
             songData.title,
-            songData.artists
+            songData.artists,
           );
           // console.log(deezerData);
-          
+
           songData = {
             ...songData,
             deezerLink: deezerData.deezerLink,
@@ -52,7 +53,7 @@ export const processSongLink = async (req, res) => {
         try {
           const spotifyData = await searchSpotifySong(
             songData.title,
-            songData.artists
+            songData.artists,
           );
           songData = {
             ...songData,
@@ -75,7 +76,7 @@ export const processSongLink = async (req, res) => {
         artists: songData.artists,
       },
       { $inc: { suggestionCount: 1 } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (existingSong) {
@@ -83,13 +84,21 @@ export const processSongLink = async (req, res) => {
     }
 
     const userId = req.user.id; // req.user from authenticate-Middleware
-    
+
     const newSong = new Song(songData);
     await newSong.save();
 
-    await Song.findByIdAndUpdate(newSong._id, {$set: {addedBy: userId}}, {new: true});
+    await Song.findByIdAndUpdate(
+      newSong._id,
+      { $set: { addedBy: userId } },
+      { new: true },
+    );
 
-    await User.findByIdAndUpdate(userId, {$inc: {tokens: 1}, $push: {suggestedSongs: newSong._id}}, {new: true}) // Song zum User hinzufügen
+    await User.findByIdAndUpdate(
+      userId,
+      { $inc: { tokens: 1 }, $push: { suggestedSongs: newSong._id } },
+      { new: true },
+    ); // Song zum User hinzufügen
 
     res
       .status(201)
@@ -100,45 +109,90 @@ export const processSongLink = async (req, res) => {
   }
 };
 
+export const addMotivation = async (req, res) => {
+  try {
+    const { songId } = req.params;
+    const { motivation, language, genres } = req.body;
+
+    console.log(songId, motivation, language, genres);
+
+    const updatedSong = await Song.findByIdAndUpdate(
+      songId,
+      { motivation, language, genres },
+      { new: true, runValidators: true },
+    );
+
+    if (!updatedSong) {
+      return res.status(404).json({ msg: "Song not found!" });
+    }
+
+    console.log(updatedSong);
+
+    res
+      .status(200)
+      .json({ msg: "Motivation added successfully!", song: updatedSong });
+  } catch (error) {
+    console.trace("Detaillierter Fehler:", error);
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    res.status(500).json({ msg: "An error occurred, please try again" });
+  }
+};
+
 export const getRandomSong = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userId);
     // console.log(user.tokens);
 
-    if(user.tokens < 1) {
-      return res.status(402).json({msg: "You need to suggest a Song first!"})
-    } 
+    if (user.tokens < 1) {
+      return res.status(402).json({ msg: "You need to suggest a Song first!" });
+    }
 
     console.log("number of token are sufficient!");
 
-    await User.findByIdAndUpdate(userId, {$inc: {tokens: -1}}, {new: true})
+    await User.findByIdAndUpdate(
+      userId,
+      { $inc: { tokens: -1 } },
+      { new: true },
+    );
 
     // console.log(user.tokens);
-    
 
     const [randomSong] = await Song.aggregate([
-      {$match: {listenedTo: false}},
-      {$sample: {size: 1}}
+      { $match: { listenedTo: false } },
+      { $sample: { size: 1 } },
     ]);
 
     if (!randomSong) {
-      return res.status(404).json({msg: "Keine ungespielten Songs gefunden."})
+      return res
+        .status(404)
+        .json({ msg: "Keine ungespielten Songs gefunden." });
     } else {
-      await Song.updateOne({_id: randomSong._id}, {$set: {listenedTo: true, listenedBy: userId}})
-      await User.findByIdAndUpdate(userId, {$push: {listenedSongs: {songId:randomSong._id}}})
+      await Song.updateOne(
+        { _id: randomSong._id },
+        { $set: { listenedTo: true, listenedBy: userId } },
+      );
+      await User.findByIdAndUpdate(userId, {
+        $push: { listenedSongs: { songId: randomSong._id } },
+      });
     }
 
     const userWhoAdded = await User.findById(randomSong.addedBy);
 
     const responseSong = {
       ...randomSong,
-      addedBy : userWhoAdded ? userWhoAdded.username : null
-    }
+      addedBy: userWhoAdded ? userWhoAdded.username : null,
+    };
 
-    res.status(200).json(responseSong)
+    res.status(200).json(responseSong);
   } catch (error) {
-    res.status(500).json({msg: "Ein Fehler beim Finden eines Songs ist aufgetreten!"})
+    res
+      .status(500)
+      .json({ msg: "Ein Fehler beim Finden eines Songs ist aufgetreten!" });
   }
-}
+};

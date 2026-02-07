@@ -4,11 +4,12 @@ const songSchema = new Schema ({
     // Song-Infos:
     title: {type: String, required: true},
     artists: [{type: String}],
-    genres: [{type: String}],
+    genres:{ type: [String], default: [] },
     album: { type: String },
     releaseDate: { type: String },
     duration: { type: Number },
     cover: {type: String},
+    language:{type: [String], default: []},
     // Access-Info:
     spotifyLink: { type: String },
     deezerLink: { type: String },
@@ -18,7 +19,9 @@ const songSchema = new Schema ({
     addedBy: String,
     suggestionCount: {type: Number, default: 0},
     listenedBy: String,
-    listenedTo: {type: Boolean, default: false}
+    motivation: {type: String, default: ""},
+    rating: {type: Number, default: 5},
+    listenedTo: {type: Boolean, default: false},
 }, {timestamps: true})
 
 export const Song = model("Song", songSchema) 
