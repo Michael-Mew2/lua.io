@@ -1,0 +1,54 @@
+/* BasisHintergrund */
+.baseBackground {
+     position: relative;
+  background: transparent;
+  z-index: 1;
+
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    border-radius: var(--mantine-radius-lg);
+    background-color: var(--mantine-color-body);
+    opacity: 0.7;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.9px);
+    -webkit-backdrop-filter: blur(7.9px);
+    border: 1px solid
+      color-mix(in srgb, var(--mantine-color-body), transparent 10%);
+  }
+}
+
+.loaderContainer {
+    position:absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background: transparent;
+}
+
+.loader {
+  width: 60px;
+  aspect-ratio: 1;
+  --g: conic-gradient(from -90deg at 10px 10px, #000 90deg, #0000 0);
+  background:
+    var(--g),
+    var(--g) 10px 10px,
+    var(--g) 20px 20px;
+  background-size: 50% 50%;
+  animation: l15 1s infinite;
+}
+@keyframes l15 {
+  90%,
+  100% {
+    background-position:
+      -30px 30px,
+      -20px 40px,
+      -10px 50px;
+  }
+}
