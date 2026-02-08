@@ -11,6 +11,7 @@ import { AuthProvider } from "./contextx/AuthContext";
 import { RegProvider } from "./contextx/RegContext";
 import { SongProvider } from "./contextx/SongContext";
 import { ShareSongProvider } from "./contextx/ShareSongContext";
+import { ReceiveSongProvider } from "./contextx/ReceiveSongContext";
 
 function App() {
   return (
@@ -21,9 +22,11 @@ function App() {
           <AuthProvider>
             <RegProvider>
               <ShareSongProvider>
-                <SongProvider>
-                  <Routing />
-                </SongProvider>
+                <ReceiveSongProvider>
+                  <SongProvider>
+                    <Routing />
+                  </SongProvider>
+                </ReceiveSongProvider>
               </ShareSongProvider>
             </RegProvider>
           </AuthProvider>
