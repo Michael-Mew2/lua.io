@@ -22,7 +22,7 @@ export const ReceiveSongProvider = ({ children }) => {
           setSong(response.data.song);
         }
 
-        console.log("Empfangene Daten:", response.data);
+        console.log("Empfangene Daten:", response.data.song);
       } catch (error) {
         console.error("Error checking tokens:", error);
       } finally {
@@ -34,7 +34,7 @@ export const ReceiveSongProvider = ({ children }) => {
   }, []);
 
   return (
-    <ReceiveSongContext.Provider value={{ isLoading, hasEnoughTokens }}>
+    <ReceiveSongContext.Provider value={{ isLoading, hasEnoughTokens, song }}>
       {children}
     </ReceiveSongContext.Provider>
   );

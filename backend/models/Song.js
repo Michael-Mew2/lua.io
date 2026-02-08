@@ -20,7 +20,9 @@ const songSchema = new Schema ({
     suggestionCount: {type: Number, default: 0},
     listenedBy: String,
     motivation: {type: String, default: ""},
-    rating: {type: Number, default: 5},
+    comment: {type: String, default: ""},
+    rating: {type: Number, default: 0},
+    ranking: {type: Number},
     listenedTo: {type: Boolean, default: false},
 }, {timestamps: true})
 

@@ -10,14 +10,15 @@ import { ReceiveSongContext } from "../../contextx/ReceiveSongContext";
 export default function MusicReceive() {
   const {isLoading, hasEnoughTokens, song} = React.useContext(ReceiveSongContext)
 
-
+  console.log("Site got:", song);
+  
 
   return (
     <>
       {isLoading ? (
         <LoadingScreen />
       ) : hasEnoughTokens ? (
-        <SimpleGrid cols={{ base: 1, md: 2 }}>
+        <SimpleGrid cols={{ base: 1, sm: 2 }}>
           <YouGotMusic song={song} />
           <ReceivedSongComment song={song} />
         </SimpleGrid>
