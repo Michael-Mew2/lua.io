@@ -5,6 +5,8 @@ import { sendVerificationMail } from "../services/nodemailer.js";
 import { verifyToken } from "../middleware/jwt.js";
 import * as crypto from "crypto";
 import { en, de, fr, es, it, pt, zh, ar, ru, pl, ko, hi } from "naughty-words";
+import { Song } from "../models/Song.js";
+import mongoose from "mongoose";
 
 const allBadWords = [
   ...new Set([
@@ -223,11 +225,78 @@ export async function checkAuthStatus(req, res) {
         emailValidated: user.emailValidated,
         listenedSongs: user.listenedSongs,
         suggestedSongs: user.suggestedSongs,
-        referral: user.referral
+        referral: user.referral,
       },
     });
   } catch (error) {
     console.error("Auth check error:", error);
     res.status(500).json({ msg: "Error checking authentication!" });
+  }
+}
+
+export async function checkIfEnoughTokens(req, res) {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).select("tokens");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    const userTokenQuantity = user.tokens;
+    const sufficientTokens = userTokenQuantity > 0;
+    console.log("User has enough tokens:", sufficientTokens);
+
+    if (sufficientTokens) {
+      // Wähle einen zufälligen Song aus:
+      const [randomSong] = await Song.aggregate([
+        {
+          $match: {
+            listenedTo: false,
+            addedBy: { $ne: new mongoose.Types.ObjectId(userId) },
+          },
+        },
+        { $sample: { size: 1 } },
+      ]);
+
+      if (!randomSong) {
+        return res
+          .status(404)
+          .json({ msg: "Keine ungespielten Songs gefunden" });
+      }
+
+      // Reduziere Anzahl an Tokens
+      await User.findByIdAndUpdate(
+        userId,
+        { $inc: { tokens: -1 } },
+        { new: true },
+      );
+
+      await Song.updateOne(
+        { _id: randomSong._id },
+        { $set: { listenedTo: true, listenedBy: userId } },
+      );
+
+      await User.findByIdAndUpdate(userId, {
+        $push: { listenedSongs: { songId: randomSong._id } },
+      });
+
+      const userWhoAdded = await User.findById(randomSong.addedBy);
+
+      const responseSong = {
+        ...randomSong,
+        addedBy: userWhoAdded ? userWhoAdded.username : null,
+      };
+
+      res.status(200).json({
+        sufficientTokens,
+        song: responseSong,
+      });
+    } else {
+      res.status(200).json({ sufficientTokens});
+    }
+  } catch (error) {
+    console.error("Error while checking tokens:", error);
+    res.status(500).json({ msg: "An error occurred, pease try again" });
   }
 }
