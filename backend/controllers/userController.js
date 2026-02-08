@@ -237,10 +237,27 @@ export async function checkAuthStatus(req, res) {
 export async function checkIfEnoughTokens(req, res) {
   try {
     const userId = req.user.id;
-    const user = await User.findById(userId).select("tokens");
+    const user = await User.findById(userId).select("tokens currentSong");
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Benutzer hat noch song =>diesen Song zurückgeben:
+    if (user.currentSong) {
+      const currentSong = await Song.findById(user.currentSong);
+
+      if (currentSong) {
+        const userWhoAdded = await User.findById(currentSong.addedBy);
+        const responseSong = {
+          ...currentSong.toObject(),
+          addedByUsername: userWhoAdded ? userWhoAdded.username : null,
+        };
+        return res.status(200).json({
+          sufficientTokens: true,
+          song: responseSong,
+        });
+      }
     }
 
     const userTokenQuantity = user.tokens;
@@ -249,21 +266,19 @@ export async function checkIfEnoughTokens(req, res) {
 
     if (sufficientTokens) {
       // Wähle einen zufälligen Song aus:
-      const [randomSong] = await Song.aggregate([
-        {
-          $match: {
-            listenedTo: false,
-            addedBy: { $ne: new mongoose.Types.ObjectId(userId) },
-          },
-        },
-        { $sample: { size: 1 } },
-      ]);
+     const songs = await Song.find({
+        listenedTo: false,
+        addedBy: { $ne: userId }
+      });
 
-      if (!randomSong) {
+      if (songs.length === 0) {
         return res
           .status(404)
           .json({ msg: "Keine ungespielten Songs gefunden" });
       }
+
+      const randomIndex = Math.floor(Math.random() * songs.length)
+      const randomSong = songs[randomIndex]
 
       // Reduziere Anzahl an Tokens
       await User.findByIdAndUpdate(
@@ -277,15 +292,19 @@ export async function checkIfEnoughTokens(req, res) {
         { $set: { listenedTo: true, listenedBy: userId } },
       );
 
+      // Song zur Liste der gehörten Songs des Nutzers hinzufügen:
       await User.findByIdAndUpdate(userId, {
+         $set: { currentSong: randomSong._id },
         $push: { listenedSongs: { songId: randomSong._id } },
       });
 
+      // Benutzernamen des Erstellers holen:
       const userWhoAdded = await User.findById(randomSong.addedBy);
 
+      // Response-Objekt erstellen:
       const responseSong = {
         ...randomSong,
-        addedBy: userWhoAdded ? userWhoAdded.username : null,
+        addedByUsername: userWhoAdded ? userWhoAdded.username : null,
       };
 
       res.status(200).json({
@@ -293,10 +312,60 @@ export async function checkIfEnoughTokens(req, res) {
         song: responseSong,
       });
     } else {
-      res.status(200).json({ sufficientTokens});
+      res.status(200).json({ sufficientTokens });
     }
   } catch (error) {
     console.error("Error while checking tokens:", error);
     res.status(500).json({ msg: "An error occurred, pease try again" });
+  }
+}
+
+export async function deleteCurrentSong(req, res) {
+  try {
+    const userId = req.user.id;
+
+    await User.findByIdAndUpdate(userId, { $unset: { currentSong: "" } });
+
+    res.status(200).json({ msg: "Current song deleted successfully" });
+  } catch (error) {
+    console.error("Error while deleting current song:", error);
+    res
+      .status(500)
+      .json({
+        msg: "An error while removing the song occurred, please try again",
+      });
+  }
+}
+
+export async function getCurrentSong(req, res) {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user.currentSong) {
+      return res.status(404).json({ msg: "No current song found." });
+    }
+
+    const song = await Song.findById(user.currentSong);
+
+    if (!song) {
+      return res.status(404).json({ msg: "Song not found." });
+    }
+
+    const userWhoAdded = await User.findById(song.addedBy);
+
+    const responseSong = {
+      ...song.toObject(),
+      addedByUsername: userWhoAdded ? userWhoAdded.username : null,
+    };
+
+    res.status(200).json(responseSong);
+  } catch (error) {
+    console.error("Error while fetching mounted song:", error);
+    res
+      .status(500)
+      .json({
+        msg: "An error occured while fetching the mounted song, please try again.",
+      });
   }
 }

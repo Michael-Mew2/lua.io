@@ -14,7 +14,7 @@ export const ReceiveSongProvider = ({ children }) => {
         const response = await axiosInstance.get("user/checkEnoughTokens", {
           withCredentials: true,
         });
-        console.log("User has enough token:", response.data.data);
+        console.log("User has enough token:", response.data.sufficientTokens);
 
         setHasEnoughTokens(response.data.sufficientTokens);
 

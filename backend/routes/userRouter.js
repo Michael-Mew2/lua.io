@@ -10,6 +10,8 @@ userRouter
     .get("/verify/:token", user.verifyEmail)
     .get("/check", user.checkAuthStatus)
     .get("/checkEnoughTokens", authenticate, user.checkIfEnoughTokens)
+    .get("/currentSong", authenticate, user.getCurrentSong)
+    .delete("/currentSong", authenticate, user.deleteCurrentSong);
 
 
 export default userRouter;
