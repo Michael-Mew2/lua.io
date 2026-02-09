@@ -16,8 +16,8 @@ export default function YouGotMusic({ song }) {
   return (
     <Center h="100%">
       <Box h="100%" ta="center">
-        <Text>This song is presented to you by</Text>
-        <Text>{song.addedByUsername}</Text>
+        {song.addedByUsername && <Text>This song is presented to you by</Text>}
+        {song.addedByUsername && <Text>{song.addedByUsername}</Text>}
         <Stack align="center">
           <Image h={140} w={140} radius="md" src={song.cover} />
           <Text>

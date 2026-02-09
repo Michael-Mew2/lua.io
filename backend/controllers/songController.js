@@ -196,3 +196,42 @@ export const getRandomSong = async (req, res) => {
       .json({ msg: "Ein Fehler beim Finden eines Songs ist aufgetreten!" });
   }
 };
+
+export async function addComment(req, res) {
+  try {
+    const { songId } = req.params;
+    const { rating, comment, language = [], genres = [] } = req.body;
+    const userId = req.user.id;
+
+    // Song aktualisieren
+    const updatedSong = await Song.findByIdAndUpdate(
+      songId,
+      {
+        $set: {
+          rating,
+          comment,
+          ...(language.length > 0 && { language }),
+          ...(genres.length > 0 && { genres }),
+        },
+      },
+      { new: true },
+    );
+
+    if (!updatedSong) {
+      return res.status(404).json({ msg: "Song not found" });
+    }
+
+    const user = await User.findByIdAndUpdate(userId)
+
+    const username = user.username
+
+    res.status(200).json({
+      msg: "Comment and rating added successfully",
+      data: {username},
+      song: updatedSong,
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ msg: "Failed to add comment." });
+  }
+}
