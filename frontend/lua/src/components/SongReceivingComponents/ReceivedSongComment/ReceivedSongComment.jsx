@@ -26,10 +26,12 @@ import {
 import { Form, useForm } from "@mantine/form";
 import { ReceiveSongContext } from "../../../contextx/ReceiveSongContext";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from "../../../contextx/useAuth"
 
 export default function ReceivedSongComment({ song }) {
   const { submitSongComment } = React.useContext(ReceiveSongContext);
   const navigate = useNavigate();
+  const {user} = useAuth();
 
   const form = useForm({
     initialValues: {
@@ -64,7 +66,7 @@ export default function ReceivedSongComment({ song }) {
     }
   };
 
-  const targetPage = `/members/${song.addedByUsername}`;
+  const targetPage = `/members/${user.username}`;
 
   return (
     <Box h="100%" style={{ maxHeight: "100%" }}>
