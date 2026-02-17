@@ -11,10 +11,23 @@ import {
 } from "@mantine/core";
 import { IconWorldWww } from "@tabler/icons-react";
 import { ShareSongContext } from "../../../contextx/ShareSongContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contextx/useAuth";
 
 export default function SongShareInator({onSongShared}) {
   const [songLink, setSongLink] = React.useState("");
   const { shareSong, loading, error } = React.useContext(ShareSongContext);
+
+  const {user} = useAuth();
+  const navigate = useNavigate();
+  const abortMissionRoute = `/members/${user.username}`
+
+  const handleAbort = () => {
+    setSongLink("");
+    navigate(abortMissionRoute);
+    console.log("Maybe next time");
+    
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +67,7 @@ export default function SongShareInator({onSongShared}) {
                 <Button variant="filled" color="violet" type="submit" loading={loading}>
                   Share my song!
                 </Button>
-                <Button variant="filled" color="grey" onClick={() => setSongLink("")}>
+                <Button variant="filled" color="grey" onClick={handleAbort}>
                   I have nothing to share (cancel)
                 </Button>
               </Flex>

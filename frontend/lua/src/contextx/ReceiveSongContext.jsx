@@ -15,44 +15,48 @@ export const ReceiveSongProvider = ({ children }) => {
   const submitSongComment = async (songId, formValues, onSuccess) => {
     try {
       // Validierung von Pflichtfeldern:
-      if(!formValues.rating || formValues.rating === 0) {
+      if (!formValues.rating || formValues.rating === 0) {
         notifications.show({
-          title:"Haven't you forgot something?",
-          message:"You need to give a rating",
-          color:"red",
+          title: "Haven't you forgot something?",
+          message: "You need to give a rating",
+          color: "red",
           icon: <IconX size={20} />,
         });
         return false;
       }
 
-      if(!formValues.comment || formValues.comment.trim() === "") {
+      if (!formValues.comment || formValues.comment.trim() === "") {
         notifications.show({
-          title:"Haven't you forgot something?",
-          message:"You need to give a a feedback.",
-          color:"red",
+          title: "Haven't you forgot something?",
+          message: "You need to give a a feedback.",
+          color: "red",
           icon: <IconX size={20} />,
         });
         return false;
       }
 
       const response = await axiosInstance.put(
-        `/song/${songId}/comment`, formValues, {withCredentials: true}
+        `/song/${songId}/comment`,
+        formValues,
+        { withCredentials: true },
       );
 
       notifications.show({
         title: "Success!",
         message: "Thank you!",
-        color:"green",
-        icon:<IconMoodSmile size={20} />
+        color: "green",
+        icon: <IconMoodSmile size={20} />,
       });
 
       // Song unmounten:
-      await axiosInstance.delete("/user/currentSong", {withCredentials: true});
+      await axiosInstance.delete("/user/currentSong", {
+        withCredentials: true,
+      });
 
       // State Aktualisieren:
       setSong(null);
       console.log("Das wurde un-mounted:", response);
-      navigate(`/members/${response.data.data}`)
+      navigate(`/members/${response.data.data}`);
       if (onSuccess) onSuccess();
       return true;
     } catch (error) {
@@ -62,9 +66,9 @@ export const ReceiveSongProvider = ({ children }) => {
         color: "red",
         icon: <IconMoodSadDizzy size={20} />,
       });
-      return false; 
+      return false;
     }
-  }
+  };
 
   React.useEffect(() => {
     const checkIfEnoughTokens = async () => {
@@ -89,10 +93,12 @@ export const ReceiveSongProvider = ({ children }) => {
     };
 
     checkIfEnoughTokens();
-  }, []);
+  }, [hasEnoughTokens]);
 
   return (
-    <ReceiveSongContext.Provider value={{ isLoading, hasEnoughTokens, song, submitSongComment }}>
+    <ReceiveSongContext.Provider
+      value={{ isLoading, hasEnoughTokens, song, submitSongComment }}
+    >
       {children}
     </ReceiveSongContext.Provider>
   );

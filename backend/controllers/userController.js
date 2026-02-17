@@ -226,6 +226,7 @@ export async function checkAuthStatus(req, res) {
         listenedSongs: user.listenedSongs,
         suggestedSongs: user.suggestedSongs,
         referral: user.referral,
+        currentSong: user.currentSong,
       },
     });
   } catch (error) {

@@ -48,7 +48,7 @@ export default function SharedSongComment({ song }) {
     },
   });
 
-  const targetPage = `/members/${user.username}`;
+  const targetPage = `/members/${user.username}/claim`;
 
   const handleSubmit = async () => {
     try {

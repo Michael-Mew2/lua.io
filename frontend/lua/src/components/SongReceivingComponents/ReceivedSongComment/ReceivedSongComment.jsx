@@ -66,7 +66,7 @@ export default function ReceivedSongComment({ song }) {
     }
   };
 
-  const targetPage = `/members/${user.username}`;
+  const targetPage = `/members/${user.username}/share`;
 
   return (
     <Box h="100%" style={{ maxHeight: "100%" }}>
