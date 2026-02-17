@@ -67,6 +67,19 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
+  const refreshUser = async () => {
+    try {
+      const response = await axiosInstance.get(`/user/check`, {withCredentials: true,
+      });
+      if (response.status === 200) {
+        setUser(response.data.user);
+      }
+    } catch (error) {
+      console.error("Fehler beim aktualisieren:", error);
+      
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -76,6 +89,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         loginApi,
         loading, // Kann verwendet werden, um einen Ladezustand anzuzeigen
+        refreshUser,
       }}
     >
       {children}

@@ -21,11 +21,13 @@ import { useNavigate } from "react-router-dom";
 import { ShareSongContext } from "../../../contextx/ShareSongContext";
 import { notifications } from "@mantine/notifications";
 import { AuthContext } from "../../../contextx/AuthContext";
+import { ReceiveSongContext } from "../../../contextx/ReceiveSongContext";
 
 export default function SharedSongComment({ song }) {
   const navigate = useNavigate();
   const { addMotivationApi } = React.useContext(ShareSongContext);
-  const { user } = React.useContext(AuthContext);
+  const { user, refreshUser } = React.useContext(AuthContext);
+  const {refreshTokenStatus} = React.useContext(ReceiveSongContext)
 
   const form = useForm({
     mode: "controlled",
@@ -59,6 +61,8 @@ export default function SharedSongComment({ song }) {
           form.values.language,
           form.values.genres,
         );
+        await refreshUser();
+        await refreshTokenStatus();
 
         //console.log("ShareSongComment-handelSubmit:", response);
         
@@ -82,7 +86,9 @@ export default function SharedSongComment({ song }) {
     }
   };
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    // await refreshUser();
+    await refreshTokenStatus();
     navigate(targetPage);
   };
 

@@ -14,14 +14,14 @@ export default function MusicShare() {
   const {user} = useAuth();
   const navigate = useNavigate();
 
-  const shareLimit = false;
+  const shareLimit = true; // auf false setzten, wenn die Liste gefüllt werden soll.
 
   React.useEffect(() => {
     console.log("Need to rate a song first?", hasEnoughTokens);
-    if(hasEnoughTokens && shareLimit) {
+    if(hasEnoughTokens && !sharedSong && shareLimit) {
       navigate(`/members/${user.username}/claim`)
     }
-  }, [hasEnoughTokens])
+  }, [hasEnoughTokens, sharedSong])
 
   return (
     <>

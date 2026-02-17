@@ -13,27 +13,30 @@ import { IconWorldWww } from "@tabler/icons-react";
 import { ShareSongContext } from "../../../contextx/ShareSongContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contextx/useAuth";
+import { ReceiveSongContext } from "../../../contextx/ReceiveSongContext";
 
-export default function SongShareInator({onSongShared}) {
+export default function SongShareInator({ onSongShared }) {
   const [songLink, setSongLink] = React.useState("");
   const { shareSong, loading, error } = React.useContext(ShareSongContext);
 
-  const {user} = useAuth();
+  const { user, refreshUser } = useAuth();
+  const { refreshTokenStatus } = React.useContext(ReceiveSongContext);
   const navigate = useNavigate();
-  const abortMissionRoute = `/members/${user.username}`
+  const abortMissionRoute = `/members/${user.username}`;
 
   const handleAbort = () => {
     setSongLink("");
     navigate(abortMissionRoute);
     console.log("Maybe next time");
-    
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await shareSong(songLink);
-        onSongShared(response); // Übergabe der Antwort an Elternelement
+      await refreshUser();
+      // await refreshTokenStatus();
+      onSongShared(response); // Übergabe der Antwort an Elternelement
       setSongLink("");
     } catch (error) {
       // Fehler wird im Kontext behandelt
@@ -54,7 +57,7 @@ export default function SongShareInator({onSongShared}) {
                 radius="sm"
                 leftSection={<IconWorldWww size={16} />}
                 value={songLink}
-                 onChange={(e) => setSongLink(e.target.value)}
+                onChange={(e) => setSongLink(e.target.value)}
               />
               {error && <Text color="red">{error}</Text>}
               <Flex
@@ -64,7 +67,12 @@ export default function SongShareInator({onSongShared}) {
                 mt="lg"
                 gap="sm"
               >
-                <Button variant="filled" color="violet" type="submit" loading={loading}>
+                <Button
+                  variant="filled"
+                  color="violet"
+                  type="submit"
+                  loading={loading}
+                >
                   Share my song!
                 </Button>
                 <Button variant="filled" color="grey" onClick={handleAbort}>

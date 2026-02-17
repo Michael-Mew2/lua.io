@@ -33,6 +33,8 @@ export default function ReceivedSongComment({ song }) {
   const navigate = useNavigate();
   const {user} = useAuth();
 
+  const targetPage = `/members/${user.username}`;
+  
   const form = useForm({
     initialValues: {
       rating: 0,
@@ -66,7 +68,6 @@ export default function ReceivedSongComment({ song }) {
     }
   };
 
-  const targetPage = `/members/${user.username}/share`;
 
   return (
     <Box h="100%" style={{ maxHeight: "100%" }}>

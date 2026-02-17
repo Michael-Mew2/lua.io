@@ -8,7 +8,13 @@ import { ReceiveSongContext } from "../../contextx/ReceiveSongContext";
 
 
 export default function MusicReceive() {
-  const {isLoading, hasEnoughTokens, song} = React.useContext(ReceiveSongContext)
+  const {isLoading, hasEnoughTokens, song, fetchNewSong} = React.useContext(ReceiveSongContext)
+
+  React.useEffect(() => {
+    if(hasEnoughTokens && !song && !isLoading) {
+      fetchNewSong();
+    }
+  }, [hasEnoughTokens, song, isLoading])
 
   console.log("Site got:", song);
   
