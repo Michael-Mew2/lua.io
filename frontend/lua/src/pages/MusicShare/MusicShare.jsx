@@ -14,9 +14,11 @@ export default function MusicShare() {
   const {user} = useAuth();
   const navigate = useNavigate();
 
+  const shareLimit = false;
+
   React.useEffect(() => {
     console.log("Need to rate a song first?", hasEnoughTokens);
-    if(hasEnoughTokens) {
+    if(hasEnoughTokens && shareLimit) {
       navigate(`/members/${user.username}/claim`)
     }
   }, [hasEnoughTokens])
