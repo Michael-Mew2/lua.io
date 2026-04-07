@@ -6,10 +6,14 @@ import DashboardMainRanking from "../../components/DashboardMainComponents/Dashb
 import DashboardMainFriendsList from "../../components/DashboardMainComponents/DashboardMainFriends/DashboardMainFriendsList";
 import DashboardMainStartButton from "../../components/DashboardMainComponents/DashboardMainStartButton/DashboardMainStartButton";
 import DashboardMainFeed from "../../components/DashboardMainComponents/DashboardMainFeed/DashboardMainFeed";
+import {useAuth} from "../../contextx/useAuth"
 
 export default function Dashboard() {
   const { username } = useParams();
   const navigate = useNavigate();
+  const {user} = useAuth();
+
+
 
   const startGame = () => {
     navigate("/members/music"); // Weiterleitung zur MusicShare-Seite

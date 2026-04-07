@@ -33,6 +33,7 @@ const userSchema = new Schema({
   },
   suggestedSongs: [{ type: String }],
   listenedSongs: [{ songId: String, neverHeardBefore: Boolean, rank: Number }],
+  currentSong: {type: String, dafault:""},
 
   // Email-validation
   validationToken: String,

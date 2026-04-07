@@ -9,6 +9,7 @@ import MusicShare from "../../pages/MusicShare/MusicShare";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import SongDetails from "../../pages/SongDetails/SongDetails";
 import VerifyEmail from "../../pages/VerifyEmail/VerifyEmail";
+import MusicReceive from "../../pages/MusicReceive/MusicReceive";
 
 export default function Routing() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function Routing() {
           <Route element={<ProtectedRoute />}>
             <Route path="members/:username" element={<Dashboard />} />
             <Route path="members/:username/share" element={<MusicShare />} />
-            <Route path="members/:username/claim" element={<SongDetails />} />
+            <Route path="members/:username/claim" element={<MusicReceive />} />
           </Route>
         </Route>
       </Routes>
